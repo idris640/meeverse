@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Amiri:wght@500;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
+  :root{ 
     --green-950:#1c3626;
     --green-900:#234631;
     --green-800:#2f5a41;
@@ -173,7 +173,7 @@
   .tab-btn.active, .tab-btn:hover{background:var(--green-900); color:var(--beige-50);}
 
   .prod-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:26px 22px;}
-  .prod-card{background:var(--white); border:1px solid var(--beige-200); display:flex; flex-direction:column;}
+  .prod-card{background:var(--white); border:1px solid var(--beige-200); display:flex; flex-direction:column; min-width:0;}
   .prod-img-wrap{position:relative; aspect-ratio:3/4; overflow:hidden; background:var(--beige-200); cursor:pointer;}
   .prod-img-wrap img{width:100%; height:100%; object-fit:cover; transition:transform .4s ease;}
   .prod-card:hover .prod-img-wrap img{transform:scale(1.04);}
@@ -256,7 +256,7 @@
   form label{font-size:12.5px; letter-spacing:.03em; color:#5a5a52;}
   form input, form select, form textarea{
     padding:11px 14px; border:1px solid var(--beige-200); border-radius:2px; font-size:14px; font-family:inherit;
-    background:#fff; outline:none; color:var(--ink);
+    background:#fff; outline:none; color:var(--ink); width:100%; min-width:0; box-sizing:border-box;
   }
   form input:focus, form select:focus, form textarea:focus{border-color:var(--gold-500);}
   form textarea{resize:vertical; min-height:80px;}
@@ -422,6 +422,123 @@ const WILAYAS = [
 ["56","Djanet","جانت"],["57","El M'Ghair","المغير"],["58","El Meniaa","المنيعة"]
 ];
 
+/* Base de données bilingue des 1541 communes d'Algérie, groupées par wilaya (généré depuis le package geoalgeria). */
+const COMMUNES_BY_WILAYA = {
+"01":[["Adrar","أدرار"],["Akabli","اقبلي"],["Aoulef","أولف"],["Bouda","بودة"],["Fenoughil","فنوغيل"],["In Zghmir","إن زغمير"],["Ouled Ahmed Timmi","أولاد أحمد تيمي"],["Reggane","رقان"],["Sali","سالي"],["Sebaa","السبع"],["Tamantit","تامنطيط"],["Tamest","تامست"],["Timekten","تيمقتن"],["Tit","تيت"],["Tsabit","تسابيت"],["Zaouiet Kounta","زاوية كنتة"]],
+"02":[["Abou El Hassane","أبو الحسن"],["Ain Merane","عين مران"],["Benairia","بنايرية"],["Beni Bouattab","بني بوعتاب"],["Beni Haoua","بني حواء"],["Beni Rached","بني راشد"],["Boukadir","بوقادير"],["Bouzeghaia","بوزغاية"],["Breira","بريرة"],["Chettia","الشطية"],["Chlef","الشلف"],["Dahra","الظهرة"],["El Hadjadj","الحجاج"],["El Karimia","الكريمية"],["El Marsa","المرسى"],["Harchoun","حرشون"],["Herenfa","الهرانفة"],["Labiod Medjadja","الأبيض مجاجة"],["Moussadek","مصدق"],["Oued Fodda","وادي الفضة"],["Oued Goussine","وادي قوسين"],["Oued Sly","وادي سلي"],["Ouled Abbes","أولاد عباس"],["Ouled Ben Abdelkader","أولاد بن عبد القادر"],["Ouled Fares","أولاد فارس"],["Oum Drou","أم الدروع"],["Sendjas","سنجاس"],["Sidi Abderrahmane","سيدي عبد الرحمن"],["Sidi Akkacha","سيدي عكاشة"],["Sobha","الصبحة"],["Tadjena","تاجنة"],["Talassa","تلعصة"],["Taougrit","تاوقريت"],["Tenes","تنس"],["Zeboudja","الزبوجة"]],
+"03":[["Aïn Madhi","عين ماضي"],["Benacer Benchohra","بن ناصر بن شهرة"],["El Assafia","العسافية"],["El Haouita","الحويطة"],["Hassi Delaa","حاسي الدلاعة"],["Hassi R'Mel","حاسي الرمل"],["Kheneg","الخنق"],["Ksar El Hirane","قصر الحيران"],["Laghouat","الأغواط"],["Sidi Makhlouf","سيدي مخلوف"],["Tadjemout","تاجموت"],["Tadjrouna","تاجرونة"]],
+"04":[["Ain Babouche","عين ببوش"],["Ain Beida","عين البيضاء"],["Ain Diss","عين الديس"],["Ain Fekroun","عين فكرون"],["Ain Kercha","عين كرشة"],["Ain M'lila","عين مليلة"],["Ain Zitoun","عين الزيتون"],["Behir Chergui","بحير الشرقي"],["Berriche","بريش"],["Bir Chouhada","بئر الشهداء"],["Dhalaa","الضلعة"],["El Amiria","العامرية"],["El Belala","البلالة"],["El Djazia","الجازية"],["El Fedjoudj Boughrara Sa","الفجوج بوغرارة سعودي"],["El Harmilia","الحرملية"],["Fkirina","فكيرينة"],["Hanchir Toumghani","هنشير تومغني"],["Ksar Sbahi","قصر الصباحي"],["Meskiana","مسكيانة"],["Oued Nini","وادي نيني"],["Ouled Gacem","أولاد قاسم"],["Ouled Hamla","أولاد حملة"],["Ouled Zouai","أولاد زواي"],["Oum El Bouaghi","أم البواقي"],["Rahia","الرحية"],["Sigus","سيقوس"],["Souk Naamane","سوق نعمان"],["Zorg","الزرق"]],
+"05":[["Ain Djasser","عين جاسر"],["Aïn Touta","عين التوتة"],["Ain Yagout","عين ياقوت"],["Arris","آريس"],["Batna","باتنة"],["Béni Fedhala El Hakania","بني فضالة الحقانية"],["Boulhilat","بولهيلات"],["Boumagueur","بومقر"],["Boumia","بومية"],["Bouzina","بوزينة"],["Chemora","الشمرة"],["Chir","شير"],["Djerma","جرمة"],["El Hassi","الحاسي"],["Elmadher","المعذر"],["Fesdis","فسديس"],["Foum Toub","فم الطوب"],["Ghassira","غسيرة"],["Gosbat","القصبات"],["Guigba","القيقبة"],["Hidoussa","حيدوسة"],["Ichmoul","إيشمول"],["Inoughissene","إينوغيسن"],["Kimmel","كيمل"],["Ksar Belezma","قصر بلزمة"],["Larbaa","لارباع"],["Lazrou","لازرو"],["Lemsane","لمسان"],["Maafa","معافة"],["Menaa","منعة"],["Merouana","مروانة"],["N'Gaous","نقاوس"],["Oued Chaaba","وادي الشعبة"],["Oued El Ma","وادي الماء"],["Oued Taga","وادي الطاقة"],["Ouled Aouf","أولاد عوف"],["Ouled Fadel","أولاد فاضل"],["Ouled Sellem","أولاد سلام"],["Ouled Si Slimane","أولاد سي سليمان"],["Ouyoun El Assafir","عيون العصافير"],["Rahbat","الرحبات"],["Ras El Aïoun","رأس العيون"],["Sefiane","سفيان"],["Seriana","سريانة"],["T'Kout","تكوت"],["Talkhamt","تالخمت"],["Taxlent","تاكسلانت"],["Tazoult","تازولت"],["Teniet El Abed","ثنية العابد"],["Tighanimine","تيغانمين"],["Tigherghar","تيغرغار"],["Timgad","تيمقاد"],["Zana El Beïda","زانة البيضاء"]],
+"06":[["Adekar","أدكار"],["Ait R'zine","أيت رزين"],["Ait-Smail","أيت إسماعيل"],["Akbou","أقبو"],["Akfadou","أكفادو"],["Amalou","أمالو"],["Amizour","أميزور"],["Aokas","أوقاس"],["Barbacha","برباشة"],["Bejaia","بجاية"],["Beni Djellil","بني جليل"],["Beni K'sila","بني كسيلة"],["Beni-Mallikeche","بني مليكش"],["Benimaouche","بني معوش"],["Boudjellil","بو جليل"],["Bouhamza","بوحمزة"],["Boukhelifa","بوخليفة"],["Chellata","شلاطة"],["Chemini","شميني"],["Darguina","درقينة"],["Dra El Caid","ذراع القايد"],["El Kseur","القصر"],["Fenaia Il Maten","فناية الماثن"],["Feraoun","فرعون"],["Ighil-Ali","إغيل علي"],["Ighram","اغرم"],["Kendira","كنديرة"],["Kherrata","خراطة"],["Leflaye","الفلاي"],["M'cisna","مسيسنة"],["Melbou","مالبو"],["Oued Ghir","وادي غير"],["Ouzellaguen","أوزلاقن"],["Seddouk","صدوق"],["Sidi Ayad","سيدي عياد"],["Sidi-Aich","سيدي عيش"],["Smaoun","سمعون"],["Souk El Tenine","سوق الاثنين"],["Souk Oufella","سوق اوفلا"],["Tala Hamza","تالة حمزة"],["Tamokra","تامقرة"],["Tamridjet","تامريجت"],["Taourit Ighil","تاوريرت إغيل"],["Taskriout","تاسكريوت"],["Tazmalt","تازمالت"],["Tibane","طيبان"],["Tichy","تيشي"],["Tifra","تيفرة"],["Timezrit","تيمزريت"],["Tinebdar","تينبدار"],["Tizi-N'berber","تيزي نبربر"],["Toudja","توجة"]],
+"07":[["Aïn Naga","عين الناقة"],["Biskra","بسكرة"],["Bordj Ben Azzouz","برج بن عزوز"],["Bouchagroun","بوشقرون"],["Chetma","شتمة"],["El Feïdh","الفيض"],["El Ghrous","الغروس"],["El Hadjeb","الحاجب"],["El Haouch","الحوش"],["Foughala","فوغالة"],["Khangat Sidi Nadji","خنقة سيدي ناجي"],["Lichana","ليشانة"],["Lioua","ليوة"],["M'Chounèche","مشونش"],["M'Lili","أمليلي"],["Mekhadma","أمخادمة"],["Meziraa","المزيرعة"],["Oumache","أوماش"],["Ourlal","أورلال"],["Sidi Okba","سيدي عقبة"],["Tolga","طولقة"],["Zeribet El Oued","زريبة الوادي"]],
+"08":[["Abadla","العبادلة"],["Bechar","بشار"],["Beni-Ounif","بني ونيف"],["Boukais","بوكايس"],["Erg-Ferradj","عرق فراج"],["Kenadsa","القنادسة"],["Lahmar","لحمر"],["Machraa-Houari-Boumediene","مشرع هواري بومدين"],["Meridja","المريجة"],["Mogheul","موغل"],["Taghit","تاغيت"]],
+"09":[["Ain Romana","عين الرمانة"],["Beni Mered","بني مراد"],["Beni-Tamou","بني تامو"],["Benkhelil","بن خليل"],["Blida","البليدة"],["Bouarfa","بوعرفة"],["Boufarik","بوفاريك"],["Bougara","بوقرة"],["Bouinan","بوعينان"],["Chebli","الشبلي"],["Chiffa","الشفة"],["Chrea","الشريعة"],["Djebabra","جبابرة"],["El-Affroun","العفرون"],["Guerrouaou","قرواو"],["Hammam Elouane","حمام ملوان"],["Larbaa","الأربعاء"],["Meftah","مفتاح"],["Mouzaia","موزاية"],["Oued Djer","وادي جر"],["Oued El Alleug","وادي العلايق"],["Ouled Slama","اولاد سلامة"],["Ouled Yaich","أولاد يعيش"],["Souhane","صوحان"],["Soumaa","الصومعة"]],
+"10":[["Aghbalou","أغبالو"],["Ahl El Ksar","أهل القصر"],["Ain El Hadjar","عين الحجر"],["Ain Laloui","عين العلوي"],["Ain Turk","عين الترك"],["Ain-Bessem","عين بسام"],["Ait Laaziz","أيت لعزيز"],["Aomar","أعمر"],["Ath Mansour","آث منصور"],["Bechloul","بشلول"],["Bir Ghbalou","بئر غبالو"],["Bordj Okhriss","برج أوخريص"],["Bouderbala","بودربالة"],["Bouira","البويرة"],["Boukram","بوكرم"],["Chorfa","شرفة"],["Dechmia","الدشمية"],["Dirah","ديرة"],["Djebahia","جباحية"],["El Adjiba","العجيبة"],["El Asnam","الأسنام"],["El Hachimia","الهاشمية"],["El Khabouzia","الخبوزية"],["El-Hakimia","الحاكمية"],["El-Mokrani","المقراني"],["Guerrouma","قرومة"],["Hadjera Zerga","الحجرة الزرقاء"],["Haizer","حيزر"],["Hanif","حنيف"],["Kadiria","قادرية"],["Lakhdaria","الأخضرية"],["M Chedallah","أمشدالة"],["Maala","معلة"],["Maamora","المعمورة"],["Mezdour","مزدور"],["Oued El Berdi","وادي البردي"],["Ouled Rached","أولاد راشد"],["Raouraoua","روراوة"],["Ridane","ريدان"],["Saharidj","سحاريج"],["Souk El Khemis","سوق الخميس"],["Sour El Ghozlane","سور الغزلان"],["Taghzout","تاغزوت"],["Taguedite","تاقديت"],["Z'barbar","زبربر"]],
+"11":[["Abelsa","ابلسة"],["Ain Amguel","عين امقل"],["Idles","أدلس"],["Tamanrasset","تمنراست"],["Tazrouk","تاظروك"]],
+"12":[["Ain Zerga","عين الزرقاء"],["Bedjene","بجن"],["Bekkaria","بكارية"],["Bir Dheheb","بئر الذهب"],["Bir Mokkadem","بئر مقدم"],["Boukhadra","بوخضرة"],["Boulhaf Dyr","بولحاف الدير"],["Cheria","الشريعة"],["El Aouinet","العوينات"],["El Kouif","الكويف"],["El Ma Labiod","الماء الأبيض"],["El Meridj","المريج"],["El Mezeraa","المزرعة"],["El Ogla","العقلة"],["Gourrigueur","قريقر"],["Hammamet","الحمامات"],["Lahouidjbet","الحويجبات"],["Morsott","مرسط"],["Ouenza","الونزة"],["Oum Ali","أم علي"],["Safsaf El Ouesra","صفصاف الوسرى"],["Stah Guentis","السطح قنتيس"],["Tébessa","تبسة"],["Thlidjene","ثليجان"]],
+"13":[["Aïn Fetah","عين فتاح"],["Ain Fezza","عين فزة"],["Aïn Ghoraba","عين الغرابة"],["Ain Kebira","العين الكبيرة"],["Ain Nehala","عين النحالة"],["Aïn Tallout","عين تالوت"],["Ain Youcef","عين يوسف"],["Amieur","عمير"],["Azaïls","لعزايل"],["Bab El Assa","باب العسة"],["Béni Bahdel","بني بحدل"],["Béni Boussaïd","بني بوسعيد"],["Béni Khellad","بني خلاد"],["Béni Mester","بني مستر"],["Béni Ouarsous","بني ورسوس"],["Béni Semiel","بني صميل"],["Béni Snous","بني سنوس"],["Bensekrane","بن سكران"],["Bouhlou","بوحلو"],["Chetouane","شتوان"],["Dar Yaghmouracène","دار يغمراسن"],["Djebala","جبالة"],["El Fehoul","الفحول"],["Fellaoucène","فلاوسن"],["Ghazaouet","الغزوات"],["Hammam Boughrara","حمام بوغرارة"],["Hennaya","الحناية"],["Honaïne","حنين"],["Maghnia","مغنية"],["Mansourah","المنصورة"],["Marsa Ben M'Hidi","مرسى بن مهيدي"],["Msirda Fouaga","مسيردة الفواقة"],["Nédroma","ندرومة"],["Oued Lakhdar","وادي الأخضر"],["Ouled Mimoun","أولاد ميمون"],["Ouled Riyah","أولاد رياح"],["Remchi","الرمشي"],["Sabra","صبرة"],["Sebaa Chioukh","السبعة شيوخ"],["Sebdou","سبدو"],["Sidi Abdelli","سيدي العبدلي"],["Sidi Medjahed","سيدي مجاهد"],["Souahlia","السواحلية"],["Souani","السواني"],["Souk Thlata","سوق الثلاثاء"],["Tianet","تيانت"],["Tirni Béni Hediel","تيرني بني هديل"],["Tlemcen","تلمسان"],["Zenata","زناتة"]],
+"14":[["Aïn Bouchekif","عين بوشقيف"],["Aïn Deheb","عين الذهب"],["Aïn Dzarit","عين دزاريت"],["Aïn El Hadid","عين الحديد"],["Aïn Kermes","عين كرمس"],["Chehaïma","شحيمة"],["Dahmouni","الدحموني"],["Djebilet Rosfa","جبيلة الرصفاء"],["Djileli Ben Amar","جيلالي بن عمار"],["Faïdja","الفايجة"],["Frenda","فرندة"],["Guertoufa","قرطوفة"],["Madna","مادنة"],["Mahdia","مهدية"],["Mechraa Sfa","مشرع الصفا"],["Médrissa","مدريسة"],["Medroussa","مدروسة"],["Meghila","مغيلة"],["Mellakou","ملاكو"],["Nadorah","الناظورة"],["Naïma","النعيمة"],["Oued Lili","وادي ليلي"],["Rahouia","الرحوية"],["Sebaïne","سبعين"],["Sebt","السبت"],["Sidi Abdelghani","سيدي عبد الغني"],["Sidi Abderrahmane","سيدي عبد الرحمان"],["Sidi Ali Mellal","سيدي علي ملال"],["Sidi Bakhti","سيدي بختي"],["Sidi Hosni","سيدي حسني"],["Sougueur","السوقر"],["Tagdemt","تاقدمت"],["Takhemaret","تخمارت"],["Tiaret","تيارت"],["Tidda","تيدة"],["Tousnina","توسنينة"]],
+"15":[["Abi-Youcef","أبي يوسف"],["Aghribs","أغريب"],["Agouni-Gueghrane","أقني قغران"],["Ain-El-Hammam","عين الحمام"],["Ain-Zaouia","عين الزاوية"],["Ait Aggouacha","أيت عقواشة"],["Ait Bouaddou","أيت بوادو"],["Ait Boumahdi","أيت بومهدي"],["Ait Khellili","أيت خليلي"],["Ait Yahia Moussa","أيت يحي موسى"],["Ait-Aissa-Mimoun","أيت عيسى ميمون"],["Ait-Chafaa","أيت شافع"],["Ait-Mahmoud","أيت محمود"],["Ait-Oumalou","أيت أومالو"],["Ait-Toudert","أيت تودرت"],["Ait-Yahia","أيت يحيى"],["Akbil","اقبيل"],["Akerrou","أقرو"],["Assi-Youcef","أسي يوسف"],["Azazga","عزازقة"],["Azeffoun","أزفون"],["Beni Zmenzer","بني زمنزار"],["Beni-Aissi","بني عيسي"],["Beni-Douala","بني دوالة"],["Beni-Yenni","بني يني"],["Beni-Zikki","بني زيكي"],["Boghni","بوغني"],["Boudjima","بوجيمة"],["Bounouh","بونوح"],["Bouzeguene","بوزقن"],["Draa-Ben-Khedda","ذراع بن خدة"],["Draa-El-Mizan","ذراع الميزان"],["Freha","فريحة"],["Frikat","فريقات"],["Iboudrarene","إبودرارن"],["Idjeur","إيجار"],["Iferhounene","إفرحونان"],["Ifigha","إيفيغاء"],["Iflissen","إفليسن"],["Illilten","إيليلتن"],["Illoula Oumalou","إيلولة أومالو"],["Imsouhal","إمسوحال"],["Irdjen","إيرجن"],["Larbaa Nath Irathen","الأربعاء ناث إيراثن"],["M'kira","مكيرة"],["Maatkas","معاتقة"],["Makouda","ماكودة"],["Mechtras","مشطراس"],["Mekla","مقلع"],["Mizrana","ميزرانة"],["Ouacif","واسيف"],["Ouadhias","واضية"],["Ouaguenoun","واقنون"],["Sidi Namane","سيدي نعمان"],["Souama","صوامع"],["Souk-El-Tenine","سوق الاثنين"],["Tadmait","تادمايت"],["Tigzirt","تيقزيرت"],["Timizart","تيميزار"],["Tirmitine","تيرمتين"],["Tizi N'tleta","تيزي نثلاثة"],["Tizi-Gheniff","تيزي غنيف"],["Tizi-Ouzou","تيزي وزو"],["Tizi-Rached","تيزي راشد"],["Yakourene","إعكورن"],["Yatafene","يطافن"],["Zekri","زكري"]],
+"16":[["Ain Benian","عين بنيان"],["Ain Taya","عين طاية"],["Alger Centre","الجزائر الوسطى"],["Bab El Oued","باب الوادي"],["Bab Ezzouar","باب الزوار"],["Baba Hassen","بابا حسن"],["Bachedjerah","باش جراح"],["Baraki","براقي"],["Ben Aknoun","ابن عكنون"],["Beni Messous","بني مسوس"],["Bir Mourad Rais","بئر مراد رايس"],["Bir Touta","بئر توتة"],["Birkhadem","بئر خادم"],["Bologhine Ibnou Ziri","بولوغين بن زيري"],["Bordj El Bahri","برج البحري"],["Bordj El Kiffan","برج الكيفان"],["Bourouba","بوروبة"],["Bouzareah","بوزريعة"],["Casbah","القصبة"],["Cheraga","الشراقة"],["Dar El Beida","الدار البيضاء"],["Dely Ibrahim","دالي ابراهيم"],["Djasr Kasentina","جسر قسنطينة"],["Douira","الدويرة"],["Draria","الدرارية"],["El Achour","العاشور"],["El Biar","الابيار"],["El Harrach","الحراش"],["El Madania","المدنية"],["El Magharia","المغارية"],["El Marsa","المرسى"],["El Mouradia","المرادية"],["Hammamet","الحمامات"],["Herraoua","هراوة"],["Hussein Dey","حسين داي"],["Hydra","حيدرة"],["Khraissia","الخرايسية"],["Kouba","القبة"],["Les Eucalyptus","الكاليتوس"],["Maalma","المعالمة"],["Mohamed Belouzdad","محمد بلوزداد"],["Mohammadia","المحمدية"],["Oued Koriche","وادي قريش"],["Oued Smar","وادي السمار"],["Ouled Chebel","اولاد شبل"],["Ouled Fayet","اولاد فايت"],["Rahmania","الرحمانية"],["Rais Hamidou","الرايس حميدو"],["Reghaia","رغاية"],["Rouiba","الرويبة"],["Sehaoula","السحاولة"],["Sidi M'hamed","سيدي امحمد"],["Sidi Moussa","سيدي موسى"],["Souidania","سويدانية"],["Staoueli","سطاوالي"],["Tessala El Merdja","تسالة المرجة"],["Zeralda","زرالدة"]],
+"17":[["Aïn Chouhada","عين الشهداء"],["Aïn El Ibel","عين الإبل"],["Aïn Maabed","عين معبد"],["Ben Yaagoub","بن يعقوب"],["Charef","الشارف"],["Dar Chioukh","دار الشيوخ"],["Djelfa","الجلفة"],["Douis","الدويس"],["El Gueddid","القديد"],["El Idrissia","الإدريسية"],["Hassi Bahbah","حاسي بحبح"],["Hassi El Euch","حاسي العش"],["M'Liliha","المليليحة"],["Moudjbara","المجبارة"],["Sidi Baïzid","سيدي بايزيد"],["Tadmit","تعظميت"],["Zaafrane","زعفران"],["Zaccar","زكار"]],
+"18":[["Bordj T'har","برج الطهر"],["Boudria Beniyadjis","بودريعة بني ياجيس"],["Bouraoui Belhadef","بوراوي بلهادف"],["Boussif Ouled Askeur","بوسيف أولاد عسكر"],["Chahna","الشحنة"],["Chekfa","الشقفة"],["Djemaa Beni Habibi","الجمعة بني حبيبي"],["Djimla","جيملة"],["El Ancer","العنصر"],["El Aouana","العوانة"],["El Kennar Nouchfi","القنار نشفي"],["El Milia","الميلية"],["Emir Abdelkader","الامير عبد القادر"],["Erraguene Souissi","أراقن سويسي"],["Ghebala","غبالة"],["Jijel","جيجل"],["Kaous","قاوس"],["Khiri Oued Adjoul","خيري واد عجول"],["Oudjana","وجانة"],["Ouled Rabah","أولاد رابح"],["Ouled Yahia Khadrouch","أولاد يحيى خدروش"],["Selma Benziada","سلمى بن زيادة"],["Settara","السطارة"],["Sidi Abdelaziz","سيدي عبد العزيز"],["Sidi Marouf","سيدي معروف"],["Taher","الطاهير"],["Texenna","تاكسنة"],["Ziama Mansouriah","زيامة منصورية"]],
+"19":[["Ain Abessa","عين عباسة"],["Ain Arnat","عين أرنات"],["Ain Azel","عين أزال"],["Ain El Kebira","عين الكبيرة"],["Ain Lahdjar","عين الحجر"],["Ain Oulmene","عين ولمان"],["Ain-Legradj","عين لقراج"],["Ain-Roua","عين الروى"],["Ain-Sebt","عين السبت"],["Ait Naoual Mezada","أيت نوال مزادة"],["Ait-Tizi","ايت تيزي"],["Amoucha","عموشة"],["Babor","بابور"],["Bazer-Sakra","بازر سكرة"],["Beidha Bordj","بيضاء برج"],["Bellaa","بلاعة"],["Beni Chebana","بني شبانة"],["Beni Fouda","بني فودة"],["Beni Ourtilane","بني ورتيلان"],["Beni Oussine","بني وسين"],["Beni-Aziz","بني عزيز"],["Beni-Mouhli","بني موحلي"],["Bir Haddada","بئر حدادة"],["Bir-El-Arch","بئر العرش"],["Bouandas","بوعنداس"],["Bougaa","بوقاعة"],["Bousselam","بوسلام"],["Boutaleb","بوطالب"],["Dehamcha","الدهامشة"],["Djemila","جميلة"],["Draa-Kebila","ذراع قبيلة"],["El Eulma","العلمة"],["El Ouricia","أوريسيا"],["El-Ouldja","الولجة"],["Guellal","قلال"],["Guelta Zerka","قلتة زرقاء"],["Guenzet","قنزات"],["Guidjel","قجال"],["Hamam Soukhna","حمام السخنة"],["Hamma","الحامة"],["Hammam Guergour","حمام قرقور"],["Harbil","حربيل"],["Kasr El Abtal","قصر الابطال"],["Maaouia","معاوية"],["Maouaklane","ماوكلان"],["Mezloug","مزلوق"],["Oued El Bared","واد البارد"],["Ouled Addouane","أولاد عدوان"],["Ouled Sabor","أولاد صابر"],["Ouled Si Ahmed","أولاد سي أحمد"],["Ouled Tebben","أولاد تبان"],["Rosfa","الرصفة"],["Salah Bey","صالح باي"],["Serdj-El-Ghoul","سرج الغول"],["Setif","سطيف"],["Tachouda","تاشودة"],["Tala-Ifacene","تالة إيفاسن"],["Taya","الطاية"],["Tella","التلة"],["Tizi N'bechar","تيزي نبشار"]],
+"20":[["Ain El Hadjar","عين الحجر"],["Ain Sekhouna","عين السخونة"],["Ain Soltane","عين السلطان"],["Doui Thabet","دوي ثابت"],["El Hassasna","الحساسنة"],["Hounet","هونت"],["Maamora","المعمورة"],["Moulay Larbi","مولاي العربي"],["Ouled Brahim","أولاد إبراهيم"],["Ouled Khaled","أولاد خالد"],["Saida","سعيدة"],["Sidi Ahmed","سيدي احمد"],["Sidi Amar","سيدي عمر"],["Sidi Boubekeur","سيدي بوبكر"],["Tircine","تيرسين"],["Youb","يوب"]],
+"21":[["Ain Bouziane","عين بوزيان"],["Ain Charchar","عين شرشار"],["Ain Kechra","عين قشرة"],["Ain Zouit","عين زويت"],["Azzaba","عزابة"],["Bekkouche Lakhdar","بكوش لخضر"],["Ben Azzouz","بن عزوز"],["Beni Bechir","بني بشير"],["Beni Oulbane","بني ولبان"],["Beni Zid","بني زيد"],["Bin El Ouiden","بين الويدان"],["Bouchetata","بوشطاطة"],["Cheraia","الشرايع"],["Collo","القل"],["Djendel Saadi Mohamed","جندل سعدي محمد"],["El Arrouch","الحروش"],["El Ghedir","الغدير"],["El Hadaiek","الحدائق"],["El Marsa","المرسى"],["Emjez Edchich","مجاز الدشيش"],["Es Sebt","السبت"],["Filfila","فلفلة"],["Hammadi Krouma","حمادي كرومة"],["Kanoua","قنواع"],["Kerkara","الكركرة"],["Khenag Maoune","خناق مايو"],["Oued Zhour","وادي الزهور"],["Ouldja Boulbalout","الولجة بولبلوط"],["Ouled Attia","أولاد عطية"],["Ouled Habbaba","أولاد حبابة"],["Oum Toub","أم الطوب"],["Ramdane Djamel","رمضان جمال"],["Salah Bouchaour","صالح بو الشعور"],["Sidi Mezghiche","سيدي مزغيش"],["Skikda","سكيكدة"],["Tamalous","تمالوس"],["Zerdezas","زردازة"],["Zitouna","الزيتونة"]],
+"22":[["Ain El Berd","عين البرد"],["Ain Kada","عين قادة"],["Ain Thrid","عين الثريد"],["Ain Tindamine","عين تندمين"],["Ain- Adden","عين أدن"],["Amarnas","العمارنة"],["Bedrabine El Mokrani","بضرابين المقراني"],["Belarbi","بلعربي"],["Ben Badis","بن باديس"],["Benachiba Chelia","بن عشيبة شلية"],["Bir El Hammam","بئر الحمام"],["Boudjebaa El Bordj","بوجبهة البرج"],["Boukhanefis","بوخنفيس"],["Chetouane Belaila","شيطوان البلايلة"],["Dhaya","الضاية"],["El Hacaiba","الحصيبة"],["Hassi Dahou","حاسي دحو"],["Hassi Zahana","حاسي زهانة"],["Lamtar","لمطار"],["M'cid","مسيد"],["Makedra","مكدرة"],["Marhoum","مرحوم"],["Merine","مرين"],["Mezaourou","مزاورو"],["Mostefa Ben Brahim","مصطفى بن ابراهيم"],["Moulay Slissen","مولاي سليسن"],["Oued Sebaa","وادي السبع"],["Oued Sefioun","وادي سفيون"],["Oued Taourira","وادي تاوريرة"],["Ras El Ma","راس الماء"],["Redjem Demouche","رجم دموش"],["Sehala Thaoura","السهالة الثورة"],["Sfisef","سفيزف"],["Sidi Ali Benyoub","سيدي علي بن يوب"],["Sidi Ali Boussidi","سيدي علي بوسيدي"],["Sidi Bel-Abbes","سيدي بلعباس"],["Sidi Brahim","سيدي ابراهيم"],["Sidi Chaib","سيدي شعيب"],["Sidi Dahou Zairs","سيدي دحو الزاير"],["Sidi Hamadouche","سيدي حمادوش"],["Sidi Khaled","سيدي خالد"],["Sidi Lahcene","سيدي لحسن"],["Sidi Yacoub","سيدي يعقوب"],["Tabia","طابية"],["Taoudmout","تاودموت"],["Tefessour","تفسور"],["Teghalimet","تغاليمت"],["Telagh","تلاغ"],["Tenira","تنيرة"],["Tessala","تسالة"],["Tilmouni","تلموني"],["Zerouala","زروالة"]],
+"23":[["Ain El Berda","عين الباردة"],["Annaba","عنابة"],["Berrahal","برحال"],["Chetaibi","شطايبي"],["Cheurfa","الشرفة"],["El Bouni","البوني"],["El Eulma","العلمة"],["El Hadjar","الحجار"],["Oued El Aneb","واد العنب"],["Seraidi","سرايدي"],["Sidi Amar","سيدي عمار"],["Treat","التريعات"]],
+"24":[["Ain Ben Beida","عين بن بيضاء"],["Ain Larbi","عين العربي"],["Ain Makhlouf","عين مخلوف"],["Ain Regada","عين رقادة"],["Ain Sandel","عين صندل"],["Belkheir","بلخير"],["Bendjarah","بن جراح"],["Beni Mezline","بني مزلين"],["Bordj Sabath","برج صباط"],["Bou Hachana","بوحشانة"],["Bou Hamdane","بوحمدان"],["Bouati Mahmoud","بوعاتي محمود"],["Bouchegouf","بوشقوف"],["Boumahra Ahmed","بومهرة أحمد"],["Dahouara","الدهوارة"],["Djeballah Khemissi","جبالة الخميسي"],["El Fedjoudj","الفجوج"],["Guelaat Bou Sbaa","قلعة بوصبع"],["Guelma","قالمة"],["Hammam Debagh","حمام دباغ"],["Hammam N'bail","حمام النبايل"],["Heliopolis","هيليوبوليس"],["Houari Boumedienne","هواري بومدين"],["Khezaras","لخزارة"],["Medjez Amar","مجاز عمار"],["Medjez Sfa","مجاز الصفاء"],["Nechmaya","نشماية"],["Oued Cheham","وادي الشحم"],["Oued Ferragha","وادي فراغة"],["Oued Zenati","وادي الزناتي"],["Ras El Agba","رأس العقبة"],["Roknia","الركنية"],["Sellaoua Announa","سلاوة عنونة"],["Tamlouka","تاملوكة"]],
+"25":[["Ain Abid","عين عبيد"],["Ain Smara","عين السمارة"],["Ben Badis","ابن باديس"],["Beni Hamidane","بني حميدان"],["Constantine","قسنطينة"],["Didouche Mourad","ديدوش مراد"],["El Khroub","الخروب"],["Hamma Bouziane","حامة بوزيان"],["Ibn Ziad","ابن زياد"],["Messaoud Boudjeriou","بوجريو مسعود"],["Ouled Rahmoun","أولاد رحمون"],["Zighoud Youcef","زيغود يوسف"]],
+"26":[["Aïssaouia","العيساوية"],["Al Azizia","العزيزية"],["Baata","بعطة"],["Benchicao","بن شكاو"],["Béni Slimane","بني سليمان"],["Berrouaghia","البرواقية"],["Bir Ben Abed","بئر بن عابد"],["Bouaïchoune","بوعيشون"],["Bouchrahil","بوشراحيل"],["Bouskène","بوسكن"],["Deux Bassins","الحوضان"],["Djouab","جواب"],["Draa Essamar","ذراع السمار"],["Eddouair","الدواير"],["El Guelb El Kebir","القلب الكبير"],["El Hamdania","الحمدانية"],["El Omaria","العمارية"],["Hannacha","حناشة"],["Khamsa Djoumaa","خمس جوامع"],["Médéa","المدية"],["Medjebar","مجبر"],["Meghraoua","مغراوة"],["Mezghenna","مزغنة"],["Mihoub","ميهوب"],["Ouamri","وامري"],["Oued Harbil","وادي حربيل"],["Ouled Bouachra","أولاد بوعشرة"],["Ouled Brahim","أولاد إبراهيم"],["Ouled Deïde","أولاد ذايد"],["Ouzera","وزرة"],["Rebaïa","الربعية"],["Sedraïa","سدراية"],["Seghouane","سغوان"],["Si Mahdjoub","سي المحجوب"],["Sidi Errabie","سيدي الربيع"],["Sidi Naamane","سيدي نعمان"],["Sidi Zahar","سيدي زهار"],["Sidi Ziane","سيدي زيان"],["Souagui","السواقي"],["Tablat","تابلاط"],["Tamezguida","تمزقيدة"],["Tizi Mahdi","تيزي مهدي"],["Zoubiria","الزبيرية"]],
+"27":[["Achaacha","عشعاشة"],["Ain-Boudinar","عين بودينار"],["Ain-Nouissy","عين نويسي"],["Ain-Sidi Cherif","عين سيدي الشريف"],["Ain-Tedles","عين تادلس"],["Benabdelmalek Ramdane","بن عبد المالك رمضان"],["Bouguirat","بوقيراط"],["Fornaka","فرناقة"],["Hadjadj","حجاج"],["Hassi Mameche","حاسي ماماش"],["Hassiane","الحسيان (بني ياحي"],["Khadra","خضرة"],["Kheir-Eddine","خير الدين"],["Mansourah","منصورة"],["Mazagran","مزغران"],["Mesra","ماسرة"],["Mostaganem","مستغانم"],["Nekmaria","نكمارية"],["Oued El Kheir","وادي الخير"],["Ouled Boughalem","أولاد بوغالم"],["Ouled-Maalah","أولاد مع الله"],["Safsaf","صفصاف"],["Sayada","صيادة"],["Sidi Ali","سيدي علي"],["Sidi Belaattar","سيدي بلعطار"],["Sidi-Lakhdar","سيدي لخضر"],["Sirat","سيرات"],["Souaflia","السوافلية"],["Sour","سور"],["Stidia","ستيدية"],["Tazgait","تزقايت"],["Touahria","الطواهرية"]],
+"28":[["Aïn El Hadjel","عين الحجل"],["Aïn Khadra","عين الخضراء"],["Belaïba","بلعايبة"],["Béni Ilmane","بني يلمان"],["Berhoum","برهوم"],["Bouti Sayah","بوطي السايح"],["Chellal","الشلال"],["Dehahna","الدهاهنة"],["Hammam Dhalaa","حمام الضلعة"],["Khetouti Sed El Djir","خطوطي سد الجير"],["M'Sila","المسيلة"],["M'Tarfa","المطارفة"],["Maadid","المعاضيد"],["Maarif","المعاريف"],["Magra","مقرة"],["Ouanougha","ونوغة"],["Ouled Addi Guebala","أولاد عدي القبالة"],["Ouled Derradj","أولاد دراج"],["Ouled Madhi","أولاد ماضي"],["Ouled Mansour","أولاد منصور"],["Sidi Aïssa","سيدي عيسى"],["Sidi Hadjeres","سيدي هجرس"],["Souamaa","السوامع"],["Tarmount","تارمونت"]],
+"29":[["Ain Fares","عين فارس"],["Ain Fekan","عين فكان"],["Ain Ferah","عين فراح"],["Ain Frass","عين أفرص"],["Alaimia","العلايمية"],["Aouf","عوف"],["Benian","بنيان"],["Bou Henni","بوهني"],["Bouhanifia","بوحنيفية"],["Chorfa","الشرفاء"],["El Bordj","البرج"],["El Gaada","القعدة"],["El Ghomri","الغمري"],["El Gueitena","القطنة"],["El Hachem","الحشم"],["El Keurt","القرط"],["El Mamounia","المأمونية"],["El Menaouer","المنور"],["Ferraguig","فراقيق"],["Froha","فروحة"],["Gharrous","غروس"],["Ghriss","غريس"],["Guerdjoum","قرجوم"],["Hacine","حسين"],["Khalouia","خلوية"],["Makhda","ماقضة"],["Maoussa","ماوسة"],["Mascara","معسكر"],["Matemore","المطمور"],["Mocta-Douz","مقطع الدوز"],["Mohammadia","المحمدية"],["Nesmot","نسمط"],["Oggaz","عقاز"],["Oued El Abtal","وادي الأبطال"],["Oued Taria","وادي التاغية"],["Ras El Ain Amirouche","رأس عين عميروش"],["Sedjerara","سجرارة"],["Sehailia","السهايلية"],["Sidi Abdeldjebar","سيدي عبد الجبار"],["Sidi Abdelmoumene","سيدي عبد المومن"],["Sidi Boussaid","سيدي بوسعيد"],["Sidi Kada","سيدي قادة"],["Sig","سيق"],["Tighennif","تيغنيف"],["Tizi","تيزي"],["Zahana","زهانة"],["Zelamta","زلامطة"]],
+"30":[["Ain Beida","عين البيضاء"],["El Borma","البرمة"],["Hassi Ben Abdellah","حاسي بن عبد الله"],["Hassi Messaoud","حاسي مسعود"],["N'goussa","انقوسة"],["Ouargla","ورقلة"],["Rouissat","الرويسات"],["Sidi Khouiled","سيدي خويلد"]],
+"31":[["Ain Biya","عين البية"],["Ain Kerma","عين الكرمة"],["Ain Turk","عين الترك"],["Arzew","أرزيو"],["Ben Freha","بن فريحة"],["Bethioua","بطيوة"],["Bir El Djir","بئر الجير"],["Boufatis","بوفاتيس"],["Bousfer","بوسفر"],["Boutlelis","بوتليليس"],["El Ancor","العنصر"],["El Braya","البراية"],["El Kerma","الكرمة"],["Es Senia","السانية"],["Gdyel","قديل"],["Hassi Ben Okba","حاسي بن عقبة"],["Hassi Bounif","حاسي بونيف"],["Hassi Mefsoukh","حاسي مفسوخ"],["Marsat El Hadjadj","مرسى الحجاج"],["Mers El Kebir","المرسى الكبير"],["Messerghin","مسرغين"],["Oran","وهران"],["Oued Tlelat","وادي تليلات"],["Sidi Ben Yebka","سيدي بن يبقى"],["Sidi Chami","سيدي الشحمي"],["Tafraoui","طفراوي"]],
+"32":[["Boualem","بوعلام"],["Bougtob","بوقطب"],["Brézina","بريزينة"],["Cheguig","الشقيق"],["El Bayadh","البيض"],["El Kheïther","الخيثر"],["Ghassoul","الغاسول"],["Kef El Ahmar","الكاف الأحمر"],["Krakda","كراكدة"],["Rogassa","روقاصة"],["Sidi Amar","سيدي عمر"],["Sidi Slimane","سيدي سليمان"],["Sidi Tifour","سيدي طيفور"],["Stitten","استيتن"],["Tousmouline","توسمولين"]],
+"33":[["Bordj Omar Driss","برج عمر إدريس"],["Debdeb","دبداب"],["Illizi","إيليزي"],["In Amenas","إن أمناس"]],
+"34":[["Ain Taghrout","عين تاغروت"],["Ain Tesra","عين تسرة"],["Belimour","بليمور"],["Ben Daoud","بن داود"],["Bir Kasdali","بئر قاصد علي"],["Bordj Bou Arreridj","برج بوعريرج"],["Bordj Ghedir","برج الغدير"],["Bordj Zemmoura","برج زمورة"],["Colla","القلة"],["Djaafra","جعافرة"],["El Achir","الياشير"],["El Annasseur","العناصر"],["El Euch","العش"],["El M'hir","المهير"],["El Main","الماين"],["Elhammadia","الحمادية"],["Ghailasa","غيلاسة"],["Haraza","حرازة"],["Hasnaoua","حسناوة"],["Khelil","خليل"],["Ksour","القصور"],["Mansoura","المنصورة"],["Medjana","مجانة"],["Ouled Brahem","أولاد أبراهم"],["Ouled Dahmane","أولاد دحمان"],["Ouled Sidi-Brahim","أولاد سيدي ابراهيم"],["Rabta","الرابطة"],["Ras El Oued","رأس الوادي"],["Sidi-Embarek","سيدي أمبارك"],["Taglait","تقلعيت"],["Tassamert","تسامرت"],["Tefreg","تفرق"],["Teniet En Nasr","ثنية النصر"],["Tixter","تيكستار"]],
+"35":[["Afir","أعفير"],["Ammal","عمال"],["Baghlia","بغلية"],["Ben Choud","بن شود"],["Beni Amrane","بني عمران"],["Bordj Menaiel","برج منايل"],["Boudouaou","بودواو"],["Boudouaou El Bahri","بودواو البحري"],["Boumerdes","بومرداس"],["Bouzegza Keddara","بوزقزة قدارة"],["Chabet El Ameur","شعبة العامر"],["Corso","قورصو"],["Dellys","دلس"],["Djinet","جنات"],["El Kharrouba","الخروبة"],["Hammedi","حمادي"],["Isser","يسر"],["Khemis El Khechna","خميس الخشنة"],["Larbatache","الاربعطاش"],["Leghata","لقاطة"],["Naciria","الناصرية"],["Ouled Aissa","أولاد عيسى"],["Ouled Hedadj","أولاد هداج"],["Ouled Moussa","أولاد موسى"],["Si Mustapha","سي مصطفى"],["Sidi Daoud","سيدي داود"],["Souk El Had","سوق الحد"],["Taourga","تاورقة"],["Thenia","الثنية"],["Tidjelabine","تيجلابين"],["Timezrit","تيمزريت"],["Zemmouri","زموري"]],
+"36":[["Ain El Assel","عين العسل"],["Ain Kerma","عين الكرمة"],["Asfour","عصفور"],["Ben M Hidi","بن مهيدي"],["Berrihane","بريحان"],["Besbes","البسباس"],["Bougous","بوقوس"],["Bouhadjar","بوحجار"],["Bouteldja","بوثلجة"],["Chebaita Mokhtar","شبيطة مختار"],["Chefia","الشافية"],["Chihani","شحاني"],["Drean","الذرعان"],["Echatt","الشط"],["El Aioun","العيون"],["El Kala","القالة"],["El Tarf","الطارف"],["Hammam Beni Salah","حمام بني صالح"],["Lac Des Oiseaux","بحيرة الطيور"],["Oued Zitoun","وادي الزيتون"],["Raml Souk","رمل السوق"],["Souarekh","السوارخ"],["Zerizer","زريزر"],["Zitouna","الزيتونة"]],
+"37":[["Oum El Assel","أم العسل"],["Tindouf","تندوف"]],
+"38":[["Ammari","عماري"],["Beni Chaib","بني شعيب"],["Beni Lahcene","بني لحسن"],["Bordj Bounaama","برج بونعامة"],["Bordj El Emir Abdelkader","برج الأمير عبد القادر"],["Boucaid","بوقائد"],["Khemisti","خميستي"],["Larbaa","الأربعاء"],["Lardjem","لرجام"],["Layoune","العيون"],["Lazharia","الأزهرية"],["Maacem","المعاصم"],["Melaab","الملعب"],["Ouled Bessam","أولاد بسام"],["Sidi Abed","سيدي عابد"],["Sidi Boutouchent","سيدي بوتوشنت"],["Sidi Lantri","سيدي العنتري"],["Sidi Slimane","سيدي سليمان"],["Tamellahet","تملاحت"],["Theniet El Had","ثنية الاحد"],["Tissemsilt","تيسمسيلت"],["Youssoufia","اليوسفية"]],
+"39":[["Bayadha","البياضة"],["Ben Guecha","بن قشة"],["Debila","الدبيلة"],["Douar El Maa","دوار الماء"],["El Ogla","العقلة"],["El-Oued","الوادي"],["Guemar","قمار"],["Hamraia","الحمراية"],["Hassani Abdelkrim","حساني عبد الكريم"],["Hassi Khalifa","حاسي خليفة"],["Kouinine","كوينين"],["Magrane","المقرن"],["Mih Ouansa","اميه وانسة"],["Nakhla","النخلة"],["Oued El Alenda","وادي العلندة"],["Ourmes","ورماس"],["Reguiba","الرقيبة"],["Robbah","الرباح"],["Sidi Aoun","سيدي عون"],["Taghzout","تغزوت"],["Taleb Larbi","الطالب العربي"],["Trifaoui","الطريفاوي"]],
+"40":[["Ain Touila","عين الطويلة"],["Babar","بابار"],["Baghai","بغاي"],["Bouhmama","بوحمامة"],["Chechar","ششار"],["Chelia","شلية"],["Djellal","جلال"],["El Hamma","الحامة"],["El Mahmal","المحمل"],["El Oueldja","الولجة"],["Ensigha","انسيغة"],["Kais","قايس"],["Khenchela","خنشلة"],["Khirane","خيران"],["M'sara","مصارة"],["M'toussa","متوسة"],["Ouled Rechache","أولاد رشاش"],["Remila","الرميلة"],["Tamza","طامزة"],["Taouzianat","تاوزيانت"],["Yabous","يابوس"]],
+"41":[["Ain Soltane","عين سلطان"],["Ain Zana","عين الزانة"],["Bir Bouhouche","بئر بوحوش"],["Drea","الدريعة"],["Haddada","الحدادة"],["Hanencha","الحنانشة"],["Khedara","الخضارة"],["Khemissa","خميسة"],["M'daourouche","مداوروش"],["Machroha","المشروحة"],["Merahna","المراهنة"],["Oued Kebrit","وادي الكبريت"],["Ouillen","ويلان"],["Ouled Driss","أولاد إدريس"],["Ouled Moumen","أولاد مومن"],["Oum El Adhaim","أم العظايم"],["Ragouba","الراقوبة"],["Safel El Ouiden","سافل الويدان"],["Sedrata","سدراتة"],["Sidi Fredj","سيدي فرج"],["Souk Ahras","سوق أهراس"],["Taoura","تاورة"],["Terraguelt","ترقالت"],["Tiffech","تيفاش"],["Zaarouria","الزعرورية"],["Zouabi","الزوابي"]],
+"42":[["Aghbal","أغبال"],["Ahmer El Ain","أحمر العين"],["Ain Tagourait","عين تاقورايت"],["Attatba","الحطاطبة"],["Beni Mileuk","بني ميلك"],["Bou Haroun","بوهارون"],["Bou Ismail","بواسماعيل"],["Bourkika","بورقيقة"],["Chaiba","الشعيبة"],["Cherchell","شرشال"],["Damous","الداموس"],["Douaouda","دواودة"],["Fouka","فوكة"],["Gouraya","قوراية"],["Hadjout","حجوط"],["Hadjret Ennous","حجرة النص"],["Khemisti","خميستي"],["Kolea","القليعة"],["Larhat","الأرهاط"],["Menaceur","مناصر"],["Merad","مراد"],["Messelmoun","مسلمون"],["Nador","الناظور"],["Sidi Ghiles","سيدي غيلاس"],["Sidi Rached","سيدي راشد"],["Sidi Semiane","سيدي سميان"],["Sidi-Amar","سيدي عامر"],["Tipaza","تيبازة"]],
+"43":[["Ahmed Rachedi","أحمد راشدي"],["Ain Beida Harriche","عين البيضاء أحريش"],["Ain Mellouk","عين الملوك"],["Ain Tine","عين التين"],["Amira Arres","اعميرة اراس"],["Benyahia Abderrahmane","بن يحي عبد الرحمن"],["Bouhatem","بوحاتم"],["Chelghoum Laid","شلغوم العيد"],["Chigara","الشيقارة"],["Derrahi Bousselah","دراحي بوصلاح"],["El Ayadi Barbes","العياضي برباس"],["El Mechira","مشيرة"],["Ferdjioua","فرجيوة"],["Grarem Gouga","القرارم قوقة"],["Hamala","حمالة"],["Mila","ميلة"],["Minar Zarza","مينار زارزة"],["Oued Athmenia","وادي العثمانية"],["Oued Endja","وادي النجاء"],["Oued Seguen","وادي سقان"],["Ouled Khalouf","أولاد اخلوف"],["Rouached","الرواشد"],["Sidi Khelifa","سيدي خليفة"],["Sidi Merouane","سيدي مروان"],["Tadjenanet","تاجنانت"],["Tassadane Haddada","تسدان حدادة"],["Tassala Lematai","تسالة لمطاعي"],["Teleghma","التلاغمة"],["Terrai Bainen","ترعي باينان"],["Tiberguent","تيبرقنت"],["Yahia Beniguecha","يحي بني قشة"],["Zeghaia","زغاية"]],
+"44":[["Ain-Benian","عين البنيان"],["Ain-Bouyahia","عين بويحيى"],["Ain-Defla","عين الدفلى"],["Ain-Lechiakh","عين الاشياخ"],["Ain-Soltane","عين السلطان"],["Ain-Torki","عين التركي"],["Arib","عريب"],["Bathia","بطحية"],["Belaas","بلعاص"],["Ben Allal","بن علال"],["Bir-Ould-Khelifa","بئر ولد خليفة"],["Birbouche","بربوش"],["Bordj-Emir-Khaled","برج الأمير خالد"],["Boumedfaa","بومدفع"],["Bourached","بوراشد"],["Djelida","جليدة"],["Djemaa Ouled Cheikh","جمعة أولاد الشيخ"],["Djendel","جندل"],["El-Abadia","العبادية"],["El-Amra","العامرة"],["El-Attaf","العطاف"],["El-Maine","الماين"],["Hammam-Righa","حمام ريغة"],["Hassania","الحسانية"],["Hoceinia","الحسينية"],["Khemis-Miliana","خميس مليانة"],["Mekhatria","المخاطرية"],["Miliana","مليانة"],["Oued Chorfa","وادي الشرفاء"],["Oued Djemaa","واد الجمعة"],["Rouina","الروينة"],["Sidi-Lakhdar","سيدي الأخضر"],["Tacheta Zegagha","تاشتة زقاغة"],["Tarik-Ibn-Ziad","طارق بن زياد"],["Tiberkanine","تبركانين"],["Zeddine","زدين"]],
+"45":[["Ain Ben Khelil","عين بن خليل"],["Ain Sefra","عين الصفراء"],["Asla","عسلة"],["Djenienne Bourezg","جنين بورزق"],["El Biodh","البيوض"],["Kasdir","القصدير"],["Makmen Ben Amar","مكمن بن عمار"],["Mecheria","المشرية"],["Moghrar","مغرار"],["Naama","النعامة"],["Sfissifa","سفيسيفة"],["Tiout","تيوت"]],
+"46":[["Aghlal","أغلال"],["Ain El Arbaa","عين الأربعاء"],["Ain Kihal","عين الكيحل"],["Ain Temouchent","عين تموشنت"],["Ain Tolba","عين الطلبة"],["Aoubellil","عقب الليل"],["Beni Saf","بني صاف"],["Bouzedjar","بوزجار"],["Chaabat El Ham","شعبة اللحم"],["Chentouf","شنتوف"],["El Amria","العامرية"],["El Maleh","المالح"],["El Messaid","المساعيد"],["Emir Abdelkader","الأمير عبد القادر"],["Hammam Bou Hadjar","حمام بوحجر"],["Hassasna","الحساسنة"],["Hassi El Ghella","حاسي الغلة"],["Oued Berkeche","وادي برقش"],["Oued Sebbah","وادي الصباح"],["Ouled Boudjemaa","أولاد بوجمعة"],["Ouled Kihal","أولاد الكيحل"],["Oulhaca El Gheraba","ولهاصة الغرابة"],["Sidi Ben Adda","سيدي بن عدة"],["Sidi Boumediene","سيدي بومدين"],["Sidi Ouriache","سيدي ورياش"],["Sidi Safi","سيدي صافي"],["Tamzoura","تامزورة"],["Terga","تارقة"]],
+"47":[["Berriane","بريان"],["Bounoura","بونورة"],["Dhayet Bendhahoua","ضاية بن ضحوة"],["El Atteuf","العطف"],["El Guerrara","القرارة"],["Ghardaia","غرداية"],["Mansoura","المنصورة"],["Metlili","متليلي"],["Sebseb","سبسب"],["Zelfana","زلفانة"]],
+"48":[["Ain Rahma","عين الرحمة"],["Ain-Tarek","عين طارق"],["Ammi Moussa","عمي موسى"],["Belaassel Bouzagza","بلعسل بوزقزة"],["Bendaoud","بن داود"],["Beni Dergoun","بني درقن"],["Beni Zentis","بني زنطيس"],["Dar Ben Abdelah","دار بن عبد الله"],["Djidiouia","جديوية"],["El H'madna","الحمادنة"],["El Hassi","الحاسي"],["El Ouldja","الولجة"],["El-Guettar","القطار"],["El-Matmar","المطمر"],["Had Echkalla","حد الشكالة"],["Hamri","حمري"],["Kalaa","القلعة"],["Lahlef","لحلاف"],["Mazouna","مازونة"],["Mediouna","مديونة"],["Mendes","منداس"],["Merdja Sidi Abed","مرجة سيدي عابد"],["Ouarizane","واريزان"],["Oued El Djemaa","وادي الجمعة"],["Oued Essalem","وادي السلام"],["Oued-Rhiou","وادي رهيو"],["Ouled Aiche","أولاد يعيش"],["Ouled Sidi Mihoub","أولاد سيدي الميهوب"],["Ramka","الرمكة"],["Relizane","غليزان"],["Sidi Khettab","سيدي خطاب"],["Sidi Lazreg","سيدي لزرق"],["Sidi M'hamed Benali","سيدي أمحمد بن علي"],["Sidi M'hamed Benaouda","سيدي امحمد بن عودة"],["Sidi Saada","سيدي سعادة"],["Souk El Had","سوق الحد"],["Yellel","يلل"],["Zemmoura","زمورة"]],
+"49":[["Aougrout","أوقروت"],["Charouine","شروين"],["Deldoul","دلدول"],["Ksar Kaddour","قصر قدور"],["Metarfa","المطارفة"],["Ouled Aissa","أولاد عيسى"],["Ouled Said","أولاد السعيد"],["Talmine","طالمين"],["Timimoun","تيميمون"],["Tinerkouk","تنركوك"]],
+"50":[["Bordj Badji Mokhtar","برج باجي مختار"],["Timiaouine","تيمياوين"]],
+"51":[["Besbes","بسباس"],["Chaiba","الشعيبة"],["Doucen","الدوسن"],["Ouled Djellal","أولاد جلال"],["Ras El Miad","رأس الميعاد"],["Sidi Khaled","سيدي خالد"]],
+"52":[["Beni-Abbes","بني عباس"],["Beni-Ikhlef","بن يخلف"],["El Ouata","الواتة"],["Igli","إقلي"],["Kerzaz","كرزاز"],["Ksabi","القصابي"],["Ouled-Khodeir","أولاد خضير"],["Tabelbala","تبلبالة"],["Tamtert","تامترت"],["Timoudi","تيمودي"]],
+"53":[["Ain Salah","عين صالح"],["Foggaret Ezzoua","فقارة الزوى"],["Inghar","إينغر"]],
+"54":[["Ain Guezzam","عين قزام"],["Tin Zouatine","تين زواتين"]],
+"55":[["Benaceur","بن ناصر"],["Blidet Amor","بلدة اعمر"],["El Alia","العالية"],["El-Hadjira","الحجيرة"],["M'naguer","المنقر"],["Megarine","المقارين"],["Nezla","النزلة"],["Sidi Slimane","سيدي سليمان"],["Taibet","الطيبات"],["Tebesbest","تبسبست"],["Temacine","تماسين"],["Touggourt","تقرت"],["Zaouia El Abidia","الزاوية العابدية"]],
+"56":[["Bordj El Haouass","برج الحواس"],["Djanet","جانت"]],
+"57":[["Djamaa","جامعة"],["El-M'ghaier","المغير"],["M'rara","المرارة"],["Oum Touyour","أم الطيور"],["Sidi Amrane","سيدي عمران"],["Sidi Khelil","سيدي خليل"],["Still","سطيل"],["Tenedla","تندلة"]],
+"58":[["El Meniaa","المنيعة"],["Hassi Fehal","حاسي الفحل"],["Hassi Gara","حاسي القارة"]],
+};
+
+/* Mكاتب استلام 48HR (Stopdesk) موجودة حالياً حسب الولاية — من لوحة بيانات 48HR. الولايات غير المذكورة لا تتوفر فيها نقطة استلام بعد. */
+const STOPDESK_OFFICES_BY_WILAYA = {
+"01":[{"name":"Adrar","address":"حي 90 مسكن أدرار","phone":"0563010401"}],
+"02":[{"name":"Chlef","address":"حي بن سونة، مقابل مكتب البريد لاسيتي - الشلف","phone":"0563010402 / 0770251603"}],
+"03":[{"name":"Laghouat","address":"لواحات الشمالية: طريق بن سعد للجملة ومسجد الإمام مسلم","phone":"0563010403 / 0552594450"}],
+"04":[{"name":"Ain M'lila","address":"محور دوران ثانوية مساس محمد الإبراهيمي","phone":"0560010504"},{"name":"Oum El Bouaghi","address":"طريق الولاية مقابل محطة النقل الحضري بجانب القصر للتقسيط وبيتزا فاميلي","phone":"0563010504"}],
+"05":[{"name":"Batna","address":"برج الغولة أمام مدرسة ابن رشد الخاصة","phone":"0563010405"},{"name":"Ain Djasser","address":"حي التجزئة رقم 2 بلدية عين جاسر ولاية باتنة","phone":"0781856508"}],
+"06":[{"name":"Béjaïa","address":"بجاية خلف مركز سجن الخميس","phone":"0563010406"}],
+"07":[{"name":"Biskra","address":"المنطقة الغربية OPGI، تحت عمارات السكن الترقوي، الكوسة، بسكرة","phone":"0563010407"}],
+"08":[{"name":"Béchar","address":"حي البدر 600 مسكن أمام متوسطة رحيمي","phone":"0561686335 / 0563010408"}],
+"09":[{"name":"Blida","address":"117 Rue Palestine, Blida","phone":"0563010409 / 0770762407"},{"name":"Boufarik","address":"Boufarik","phone":"0798988989"}],
+"10":[{"name":"Bouira","address":"En face pôle université Bouira","phone":"0660612023"}],
+"12":[{"name":"Tébessa","address":"تبسة، الساكنصة، الطريق خلف المسجد الكبير","phone":"0775659852 / 0563010412"}],
+"13":[{"name":"Tlemcen","address":"إيمامة، حي المجاهدين تحت متوسطة فروحاني","phone":"0563010413 / 0563010411"}],
+"14":[{"name":"Tiaret","address":"طريق الأكاديمي تحت حمام عباس","phone":"0784207585 / 0563010414"}],
+"15":[{"name":"Tizi Ouzou","address":"Coopérative Tasarouth, Amyoud — Horaire 08H00-21H00","phone":"0563010415 / 0550287631"}],
+"16":[{"name":"Maalma (Alger)","address":"Maalma","phone":"0652666526"}],
+"17":[{"name":"Djelfa","address":"متفرق طرق الوئام، طريق بحرارة","phone":"0660486184 / 0563010417"}],
+"19":[{"name":"Sétif","address":"Cité 1006, à côté feux rouge Hafri","phone":"0563010419"},{"name":"El Eulma","address":"تساهمي جديدة، قريبة من مقهى ستار بوكس","phone":"0563597947"}],
+"20":[{"name":"Saïda","address":"شارع مولود فرعون","phone":"0563010420"}],
+"21":[{"name":"Skikda","address":"Rue de Bouyala, Skikda 21000","phone":"0563010421"}],
+"22":[{"name":"Sidi Bel Abbès","address":"نهج زواوي رابح, Sidi Bel Abbès 22000","phone":"0563010422"}],
+"23":[{"name":"Annaba","address":"مقابل مركز الشرطة 11، ليزامو","phone":"0563010423"}],
+"24":[{"name":"Guelma","address":"مقابل محطة القطار القديمة","phone":"0563010424"}],
+"25":[{"name":"Constantine - Sidi Mabrouk","address":"Sidi Mabrouk l'inférieur, rue Mohamed Lebiod n°51 cne","phone":"0563010462"},{"name":"Constantine - El Khroub (نوفل سيتي)","address":"إقامة مريم 2، دمبري، الوحدة الجوارية 20، المدينة الجديدة الخروب، علي منجلي، قسنطينة","phone":"0563010425"}],
+"26":[{"name":"Médéa","address":"طريق الجزائر \"طلعة تخابيت\"، بقرب عيادة البيطري ومحلات الميكانيكيين","phone":"0563010426"}],
+"27":[{"name":"Mostaganem","address":"حي بن شني، بالقرب من باميلا أوتو ومدرسة أفاك","phone":"0660179347 / 0563010427"}],
+"28":[{"name":"M'Sila","address":"مسكن مع طريق الملعب، متعدد الرياضات، المسيلة","phone":"0660175094"},{"name":"Bou Saada","address":"حي عقبة بن نافع، وراء دار الشباب جمال الدين الأفغاني","phone":"0563010468"}],
+"29":[{"name":"Mascara","address":"عدل 750 مسكن، العمارة ب، رقم 8، محل 3 - بلدية معسكر","phone":"0563010429"},{"name":"Mascara 2","address":"Mascara","phone":"0778899999"}],
+"30":[{"name":"Ouargla","address":"شارع فلسطين، حي بني ثور، وراء بنك البدر","phone":"0563010430"}],
+"31":[{"name":"Oran","address":"العقيد لطفي، بالقرب من الحماية المدنية","phone":"0563010431 / 0563010433"}],
+"32":[{"name":"El Bayadh","address":"Trig Mechria, autoroute, à côté salle de sport Belaidi","phone":"0770117260"}],
+"34":[{"name":"Bordj Bou Arréridj","address":"حي الجناس، وراء Saa لاسيرونس","phone":"0563010434"}],
+"35":[{"name":"Boumerdès","address":"Résidence Afritram 1, Boumerdès, Ain El Lah","phone":"0563010435 / 0660167137"}],
+"36":[{"name":"El Tarf","address":"حي سيناوي الهادي، محل رقم 04، بلدية الطارف 36000","phone":"0563010436"}],
+"37":[{"name":"Tindouf","address":"Magasin N°03, cité Al-Qasabi, Section 14, Groupement Immobilier N°165, Commune de Tindouf","phone":"0560555395"}],
+"38":[{"name":"Tissemsilt","address":"بلاطو، مقابل قاعة حفلات البدران","phone":"0784207568 / 0563010438"}],
+"39":[{"name":"El Oued","address":"حي الرمال، بجانب محل بيشوا أوتو للسيارات، بجانب مكتبة طالبي، مجمع مصطفاوي","phone":"0660210399"}],
+"40":[{"name":"Khenchela","address":"Rue de Point Lord, à côté de la clinique de dialyse Messai","phone":"0774247764"}],
+"41":[{"name":"Souk Ahras","address":"Clair Soleil, à côté de la banque CPA","phone":"0665058469"}],
+"42":[{"name":"Tipaza","address":"تيبازة وسط، أمام مسجد القطب الإمام مالك بن أنس","phone":"0563010442"}],
+"43":[{"name":"Mila","address":"تحصيص بن عمر، بالقرب من مديرية التجارة","phone":"0563010443"}],
+"44":[{"name":"Ain Defla","address":"عين الدفلى، حي شوال، بجانب مركز الأشعة للطبيب فلاح ولسبط","phone":"0669822922"}],
+"45":[{"name":"Naâma (Mécheria)","address":"نعامة","phone":"0563010445"}],
+"46":[{"name":"Ain Témouchent","address":"عين تموشنت","phone":"0563010446 / 0563010437"}],
+"47":[{"name":"Ghardaïa","address":"حي ثنية المخزن، بجانب مسجد بدر وثانوية مفدي زكريا","phone":"0796539994"}],
+"48":[{"name":"Relizane","address":"فيلاج يرالي، طريق يلعسل فوق الدوك (DOC)","phone":"0563010448"}],
+"49":[{"name":"Timimoun","address":"تيميمون","phone":"0770757575"}],
+"53":[{"name":"In Salah","address":"قصر العرب (تراقة)، قرب العيادة البيطرية","phone":"0698038435"}],
+"55":[{"name":"Touggourt","address":"طريق الإستعجالات القديمة، بجانب مصحة الشفاء","phone":"0697138992"}],
+"58":[{"name":"El Meniaa","address":"Rue de l'Unité Africaine","phone":"0770602445"}]
+};
+
+
+
 /* ---------- I18N ---------- */
 
 const T = {
@@ -447,7 +564,7 @@ const T = {
     full_name:"Nom complet", phone:"Téléphone", wilaya:"Wilaya", commune:"Commune", address:"Adresse complète",
     subtotal:"Sous-total", delivery:"Livraison", delivery_select_wilaya:"Choisir une wilaya", delivery_contact_us:"Nous contacter",
     notes:"Remarque (optionnel)", confirm_order:"Confirmer et envoyer sur WhatsApp",
-    order_sent_title:"Commande envoyée !", order_sent_desc:"Votre commande a été transmise sur WhatsApp. Nous vous contacterons rapidement pour confirmer.",
+    order_sent_title:"Commande envoyée !", order_sent_desc:"Votre commande a été acceptée. Nous vous contacterons dans les plus brefs délais.",
     close:"Fermer",
     footer_desc:"Meeverse habille la femme moderne et pudique avec des pièces élégantes, choisies avec soin.",
     footer_shop:"Boutique", footer_contact:"Contact", footer_rights:"Tous droits réservés.",
@@ -514,6 +631,19 @@ const T = {
     saved:"Modifications enregistrées.", product_saved:"Produit enregistré.", product_deleted:"Produit supprimé.",
     back_to_shop:"← Retour à la boutique", fill_required:"Merci de remplir tous les champs obligatoires.",
     view:"Voir",
+    reviews_title:"Avis clients", reviews_none:"Aucun avis pour le moment. Soyez la première à donner votre avis !",
+    reviews_count_label:"avis", review_write_title:"Laisser un avis", review_rating_label:"Note",
+    review_comment_label:"Votre commentaire", review_submit_btn:"Envoyer l'avis",
+    review_sent_ok:"Merci ! Votre avis sera visible après validation.",
+    admin_reviews:"Avis clients", reviews_admin_desc:"Approuvez ou supprimez les avis laissés par vos clientes sous vos produits.",
+    reviews_admin_none:"Aucun avis pour le moment.", review_status_pending:"En attente", review_status_approved:"Approuvé",
+    approve:"Approuver", review_for_product:"Avis pour",
+    choose_wilaya_first:"Choisissez d'abord une wilaya", choose_commune:"Choisir une commune",
+    delivery_type_label:"Mode de livraison", delivery_type_home:"À domicile", delivery_type_office:"Au bureau (Stopdesk)",
+    choose_color:"Choisir la couleur", choose_size:"Choisir la taille", stock_available:"En stock", out_of_stock:"Rupture de stock",
+    choose_variant_first:"Veuillez choisir une couleur et une taille.",
+    choose_office:"Choisir un point de retrait", no_office_in_wilaya:"Aucun point de retrait disponible dans cette wilaya pour le moment — choisissez la livraison à domicile.",
+    out_of_stock_badge:"Non disponible",
   },
   ar:{
     nav_home:"الرئيسية", nav_products:"المنتجات", nav_promo:"التخفيضات", nav_contact:"اتصل بنا",
@@ -537,7 +667,7 @@ const T = {
     full_name:"الاسم الكامل", phone:"رقم الهاتف", wilaya:"الولاية", commune:"البلدية", address:"العنوان الكامل",
     subtotal:"المجموع الفرعي", delivery:"التوصيل", delivery_select_wilaya:"اختر الولاية", delivery_contact_us:"تواصلي معنا",
     notes:"ملاحظة (اختياري)", confirm_order:"تأكيد الطلب وإرساله عبر واتساب",
-    order_sent_title:"تم إرسال الطلب!", order_sent_desc:"تم إرسال طلبك عبر واتساب. سنتواصل معك قريباً للتأكيد.",
+    order_sent_title:"تم إرسال الطلب!", order_sent_desc:"تم قبول طلبكم، سوف نتصل بكم في أقرب وقت.",
     close:"إغلاق",
     footer_desc:"Meeverse تلبس المرأة العصرية المحتشمة بقطع أنيقة، مختارة بعناية.",
     footer_shop:"المتجر", footer_contact:"تواصل معنا", footer_rights:"جميع الحقوق محفوظة.",
@@ -603,6 +733,19 @@ const T = {
     saved:"تم حفظ التعديلات.", product_saved:"تم حفظ المنتج.", product_deleted:"تم حذف المنتج.",
     back_to_shop:"→ العودة إلى المتجر", fill_required:"يرجى ملء جميع الحقول المطلوبة.",
     view:"عرض",
+    reviews_title:"آراء الزبائن", reviews_none:"لا توجد آراء حالياً. كوني أول من يترك رأيها!",
+    reviews_count_label:"رأي", review_write_title:"أضيفي رأيك", review_rating_label:"التقييم",
+    review_comment_label:"تعليقك", review_submit_btn:"إرسال الرأي",
+    review_sent_ok:"شكراً لك! سيظهر رأيك بعد الموافقة عليه.",
+    admin_reviews:"آراء الزبائن", reviews_admin_desc:"وافقي على آراء الزبائن أو احذفيها من تحت منتجاتك.",
+    reviews_admin_none:"لا توجد آراء حالياً.", review_status_pending:"قيد الانتظار", review_status_approved:"معتمد",
+    approve:"الموافقة", review_for_product:"رأي بخصوص",
+    choose_wilaya_first:"اختاري الولاية أولاً", choose_commune:"اختيار البلدية",
+    delivery_type_label:"طريقة التوصيل", delivery_type_home:"إلى المنزل", delivery_type_office:"إلى المكتب (Stopdesk)",
+    choose_color:"اختيار اللون", choose_size:"اختيار المقاس", stock_available:"متوفر", out_of_stock:"غير متوفر",
+    choose_variant_first:"يرجى اختيار اللون والمقاس.",
+    choose_office:"اختيار نقطة الاستلام", no_office_in_wilaya:"لا يوجد مكتب استلام متوفر في هذه الولاية حالياً — اختاري التوصيل إلى المنزل.",
+    out_of_stock_badge:"غير متوفر",
   }
 };
 
@@ -675,9 +818,19 @@ let PRODUCT_MODAL = null; // product object
 
 let PRODUCT_MODAL_IMG_IDX = 0;
 
+let PRODUCT_MODAL_COLOR = null;
+
+let PRODUCT_MODAL_SIZE = null;
+
 let ORDER_MODAL_OPEN = false;
 
 let ORDER_WILAYA = "";
+
+let ORDER_COMMUNE = "";
+
+let ORDER_DELIVERY_TYPE = "home"; // "home" | "office" (stopdesk)
+
+let ORDER_OFFICE_ID = ""; // index into STOPDESK_OFFICES_BY_WILAYA[wilaya] for the chosen office
 
 let ORDER_SENT = false;
 
@@ -702,6 +855,12 @@ let SETTINGS = null;
 let PRODUCTS = null;
 
 let ORDERS = null;
+
+let REVIEWS = null; // {id, productId, name, rating, comment, date, status: "pending"|"approved"}
+
+let REVIEW_FORM_OPEN_FOR = null; // productId currently showing the "write a review" form
+
+let REVIEW_FORM_RATING = 5;
 
 let fsApp = null, fsDB = null, CLOUD_READY = false, _cloudListenersAttached = false;
 
@@ -877,6 +1036,19 @@ function attachCloudListeners(){
       render();
     }
   }, err=>console.warn("settings listener error", err));
+  fsDB.collection("reviews").onSnapshot(async snap=>{
+    snap.docChanges().forEach(change=>{
+      const data = change.doc.data();
+      if(change.type==="removed"){
+        REVIEWS = REVIEWS.filter(r=>r.id!==data.id);
+      }else{
+        const idx = REVIEWS.findIndex(r=>r.id===data.id);
+        if(idx>=0) REVIEWS[idx] = data; else REVIEWS.unshift(data);
+      }
+    });
+    await LocalStore.set("reviews", JSON.stringify(REVIEWS));
+    render();
+  }, err=>console.warn("reviews listener error", err));
 }
 
 async function loadData(){
@@ -893,6 +1065,8 @@ async function loadData(){
   PRODUCTS = p ? JSON.parse(p) : DEFAULT_PRODUCTS_SEED.map(p=>({...p}));
   const o = await LocalStore.get("orders");
   ORDERS = o ? JSON.parse(o) : [];
+  const rv = await LocalStore.get("reviews");
+  REVIEWS = rv ? JSON.parse(rv) : [];
 
   // Firestore est la source de vérité (accessible depuis tous les appareils),
   // IndexedDB reste un cache local pour un chargement rapide / hors-ligne.
@@ -913,6 +1087,10 @@ async function loadData(){
         if(!ordSnap.empty) ORDERS = ordSnap.docs.map(d=>d.data());
         else if(ORDERS.length) await seedCollectionToCloud("orders", ORDERS);
 
+        const rvSnap = await fsDB.collection("reviews").get();
+        if(!rvSnap.empty) REVIEWS = rvSnap.docs.map(d=>d.data());
+        else if(REVIEWS.length) await seedCollectionToCloud("reviews", REVIEWS);
+
         const setDoc = await fsDB.collection("meta").doc("settings").get();
         if(setDoc.exists) SETTINGS = {...SETTINGS, ...setDoc.data()};
         else await pushSettingsToCloud();
@@ -927,6 +1105,7 @@ async function loadData(){
   await LocalStore.set("settings", JSON.stringify(SETTINGS));
   await LocalStore.set("products", JSON.stringify(PRODUCTS));
   await LocalStore.set("orders", JSON.stringify(ORDERS));
+  await LocalStore.set("reviews", JSON.stringify(REVIEWS));
 }
 
 async function saveSettings(){ await LocalStore.set("settings", JSON.stringify(SETTINGS)); await pushSettingsToCloud(); }
@@ -934,6 +1113,8 @@ async function saveSettings(){ await LocalStore.set("settings", JSON.stringify(S
 async function saveProducts(){ await LocalStore.set("products", JSON.stringify(PRODUCTS)); }
 
 async function saveOrders(){ await LocalStore.set("orders", JSON.stringify(ORDERS)); }
+
+async function saveReviews(){ await LocalStore.set("reviews", JSON.stringify(REVIEWS)); }
 
 
 function showToast(msg){
@@ -947,18 +1128,73 @@ function showToast(msg){
 
 /* ---------- CART LOGIC ---------- */
 
-function addToCart(id, qty=1){
-  const existing = CART.find(c=>c.id===id);
-  if(existing) existing.qty += qty; else CART.push({id, qty});
-  showToast(LANG==="ar" ? "أُضيف المنتج إلى السلة" : "Produit ajouté au panier");
-  render();
+function productHasVariants(p){ return !!(p && ((p.colors && p.colors.length) || (p.sizes && p.sizes.length))); }
+
+function stockFor(p, color, size){
+  if(!productHasVariants(p)) return (typeof p.quantity === "number") ? p.quantity : null; // null = quantité illimitée
+  const key = (color||"")+"||"+(size||"");
+  const v = p.stock ? p.stock[key] : undefined;
+  return typeof v === "number" ? v : 0;
 }
 
-function removeFromCart(id){ CART = CART.filter(c=>c.id!==id); render(); }
+function cartKey(id, color, size){ return id+"||"+(color||"")+"||"+(size||""); }
 
-function setCartQty(id, qty){
-  if(qty<=0){ removeFromCart(id); return; }
-  const it = CART.find(c=>c.id===id); if(it) it.qty = qty; render();
+function totalStockFor(p){
+  if(!productHasVariants(p)) return (typeof p.quantity === "number") ? p.quantity : null; // null = quantité illimitée
+  return Object.values(p.stock||{}).reduce((a,b)=>a+(parseInt(b)||0),0);
+}
+
+function isOutOfStock(p){
+  const total = totalStockFor(p);
+  return total !== null && total <= 0;
+}
+
+function addToCart(id, qty=1, color="", size=""){
+  const p = PRODUCTS.find(pp=>pp.id===id);
+  if(!p) return false;
+  if(productHasVariants(p)){
+    const needColor = p.colors && p.colors.length;
+    const needSize = p.sizes && p.sizes.length;
+    if((needColor && !color) || (needSize && !size)){ showToast(t('choose_variant_first')); return false; }
+    if(stockFor(p,color,size)<=0){ showToast(t('out_of_stock')); return false; }
+  } else if(isOutOfStock(p)){
+    showToast(t('out_of_stock')); return false;
+  }
+  const key = cartKey(id,color,size);
+  const existing = CART.find(c=>cartKey(c.id,c.color,c.size)===key);
+  if(existing) existing.qty += qty; else CART.push({id, color, size, qty});
+  showToast(LANG==="ar" ? "أُضيف المنتج إلى السلة" : "Produit ajouté au panier");
+  render();
+  return true;
+}
+
+function removeFromCart(id, color, size){ const key = cartKey(id,color,size); CART = CART.filter(c=>cartKey(c.id,c.color,c.size)!==key); render(); }
+
+function setCartQty(id, color, size, qty){
+  if(qty<=0){ removeFromCart(id,color,size); return; }
+  const key = cartKey(id,color,size);
+  const it = CART.find(c=>cartKey(c.id,c.color,c.size)===key); if(it) it.qty = qty; render();
+}
+
+async function decrementStockForItems(items){
+  const touchedProducts = [];
+  items.forEach(it=>{
+    const p = PRODUCTS.find(pp=>pp.id===it.id);
+    if(!p) return;
+    if(productHasVariants(p)){
+      const key = (it.color||"")+"||"+(it.size||"");
+      const current = typeof p.stock[key]==="number" ? p.stock[key] : 0;
+      p.stock[key] = Math.max(0, current - it.qty);
+      touchedProducts.push(p);
+    } else if(typeof p.quantity === "number"){
+      p.quantity = Math.max(0, p.quantity - it.qty);
+      touchedProducts.push(p);
+    }
+  });
+  if(touchedProducts.length){
+    await saveProducts();
+    for(const p of touchedProducts) await pushDocToCloud("products", p);
+  }
 }
 
 function cartTotal(){
@@ -1071,11 +1307,13 @@ function renderFooter(){
 function productCard(p){
   const hasPromo = p.oldPrice && p.oldPrice > p.price;
   const pct = hasPromo ? Math.round((1-p.price/p.oldPrice)*100) : 0;
+  const oos = isOutOfStock(p);
   return `
   <div class="prod-card">
     <div class="prod-img-wrap" onclick="openProductModal('${p.id}')">
-      <img src="${p.mainImage}" alt="${esc(p.name)}" loading="lazy"/>
-      ${hasPromo ? `<span class="badge-promo">-${pct}%</span>` : ""}
+      <img src="${p.mainImage}" alt="${esc(p.name)}" loading="lazy" style="${oos?'opacity:.5;':''}"/>
+      ${hasPromo && !oos ? `<span class="badge-promo">-${pct}%</span>` : ""}
+      ${oos ? `<span class="badge-promo" style="background:#555;">${t('out_of_stock_badge')}</span>` : ""}
     </div>
     <div class="prod-body">
       <div class="prod-cat">${esc(p.category)}</div>
@@ -1085,8 +1323,15 @@ function productCard(p){
         ${hasPromo ? `<span class="price-old">${fmtPrice(p.oldPrice)}</span>` : ""}
       </div>
       <div class="prod-actions">
+        ${oos ? `
+        <button class="btn btn-dark btn-sm btn-block" disabled style="opacity:.5;cursor:not-allowed;">${t('out_of_stock_badge')}</button>
+        ` : productHasVariants(p) ? `
+        <button class="btn btn-dark btn-sm btn-block" onclick="openProductModal('${p.id}')">${t('add_cart')}</button>
+        <button class="btn btn-gold btn-sm btn-block" onclick="openProductModal('${p.id}')">${t('buy_now')}</button>
+        ` : `
         <button class="btn btn-dark btn-sm btn-block" onclick="addToCart('${p.id}',1)">${t('add_cart')}</button>
         <button class="btn btn-gold btn-sm btn-block" onclick="buyNow('${p.id}')">${t('buy_now')}</button>
+        `}
       </div>
     </div>
   </div>`;
@@ -1094,7 +1339,7 @@ function productCard(p){
 
 
 function renderHome(){
-  const promoProducts = PRODUCTS.filter(p=>p.oldPrice && p.oldPrice>p.price).slice(0,4);
+  const promoProducts = PRODUCTS.filter(p=>p.oldPrice && p.oldPrice>p.price && p.showInPromo!==false).slice(0,4);
   return `
   <section class="hero">
     <div class="container">
@@ -1205,7 +1450,7 @@ function renderProductsPage(){
 
 
 function renderPromotionsPage(){
-  const list = PRODUCTS.filter(p=>p.oldPrice && p.oldPrice>p.price);
+  const list = PRODUCTS.filter(p=>p.oldPrice && p.oldPrice>p.price && p.showInPromo!==false);
   return `
   <section class="section">
     <div class="container">
@@ -1245,6 +1490,17 @@ function renderContactPage(){
           <strong style="color:var(--green-950);font-size:15px;">${t('contact_phone_label')}</strong>
           <span style="color:#5a5140;font-size:13.5px;direction:ltr;">${esc(SETTINGS.phone)}</span>
         </a>
+        ${(SETTINGS.extraContacts||[]).map(c=>{
+          const isUrl = /^https?:\/\//i.test(c.value);
+          const isPhoneLike = /^[0-9+ ]+$/.test(c.value);
+          const tag = (isUrl || isPhoneLike) ? "a" : "div";
+          const hrefAttr = isUrl ? `href="${esc(c.value)}" target="_blank"` : isPhoneLike ? `href="tel:${esc(c.value.replace(/\s+/g,""))}"` : "";
+          return `<${tag} ${hrefAttr} style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:36px 20px;border:1px solid var(--beige-200);border-radius:6px;background:var(--beige-50);text-align:center;transition:border-color .2s ease;">
+            <span style="width:50px;height:50px;border-radius:50%;background:var(--green-950);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;">${esc((c.label||"?").charAt(0).toUpperCase())}</span>
+            <strong style="color:var(--green-950);font-size:15px;">${esc(c.label)}</strong>
+            <span style="color:#5a5140;font-size:13.5px;direction:ltr;">${esc(c.value)}</span>
+          </${tag}>`;
+        }).join("")}
       </div>
       <div style="text-align:center;margin-top:36px;">
         <a class="btn btn-gold" href="https://wa.me/${SETTINGS.whatsapp}" target="_blank">${t('contact_cta_whatsapp')}</a>
@@ -1258,12 +1514,177 @@ function renderContactPage(){
 function openProductModal(id){
   PRODUCT_MODAL = PRODUCTS.find(p=>p.id===id);
   PRODUCT_MODAL_IMG_IDX = 0;
+  PRODUCT_MODAL_COLOR = null;
+  PRODUCT_MODAL_SIZE = null;
   render();
 }
 
-function closeProductModal(){ PRODUCT_MODAL=null; render(); }
+function closeProductModal(){ PRODUCT_MODAL=null; REVIEW_FORM_OPEN_FOR=null; render(); }
 
 function setModalImg(idx){ PRODUCT_MODAL_IMG_IDX=idx; render(); }
+
+function selectModalColor(c){ PRODUCT_MODAL_COLOR=c; PRODUCT_MODAL_SIZE=null; render(); }
+
+function selectModalSize(s){ PRODUCT_MODAL_SIZE=s; render(); }
+
+function variantSelectionReady(p){
+  if(!productHasVariants(p)) return true;
+  const needColor = p.colors && p.colors.length;
+  const needSize = p.sizes && p.sizes.length;
+  if(needColor && !PRODUCT_MODAL_COLOR) return false;
+  if(needSize && !PRODUCT_MODAL_SIZE) return false;
+  return stockFor(p, PRODUCT_MODAL_COLOR||"", PRODUCT_MODAL_SIZE||"") > 0;
+}
+
+function renderVariantPicker(p){
+  if(!productHasVariants(p)) return "";
+  if(isOutOfStock(p)){
+    return `<div style="margin-top:4px;"><span style="display:inline-block;background:#555;color:#fff;font-size:12px;padding:5px 12px;border-radius:20px;">${t('out_of_stock_badge')}</span></div>`;
+  }
+  const hasColors = p.colors && p.colors.length;
+  const hasSizes = p.sizes && p.sizes.length;
+  const selColor = PRODUCT_MODAL_COLOR;
+  const selSize = PRODUCT_MODAL_SIZE;
+
+  let colorBlock = "";
+  if(hasColors){
+    colorBlock = `
+    <div>
+      <label style="font-size:12.5px;color:#7c7669;display:block;margin-bottom:6px;">${t('choose_color')} *</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${p.colors.map(c=>{
+          const hasAnyStock = hasSizes ? p.sizes.some(s=>stockFor(p,c,s)>0) : stockFor(p,c,"")>0;
+          const active = selColor===c;
+          return `<button type="button" onclick="selectModalColor('${esc(c).replace(/'/g,"&#39;")}')" ${hasAnyStock?'':'disabled'}
+            style="padding:6px 14px;border-radius:20px;border:1px solid ${active?'var(--green-950)':'var(--beige-200)'};background:${active?'var(--green-950)':'#fff'};color:${active?'#fff':'#333'};font-size:12.5px;cursor:${hasAnyStock?'pointer':'not-allowed'};${hasAnyStock?'':'opacity:.4;'}">${esc(c)}</button>`;
+        }).join("")}
+      </div>
+    </div>`;
+  }
+
+  let sizeBlock = "";
+  if(hasSizes){
+    sizeBlock = `
+    <div>
+      <label style="font-size:12.5px;color:#7c7669;display:block;margin-bottom:6px;">${t('choose_size')} *</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${p.sizes.map(s=>{
+          const avail = hasColors ? (selColor ? stockFor(p,selColor,s) : null) : stockFor(p,"",s);
+          const disabled = hasColors ? (selColor ? avail<=0 : false) : avail<=0;
+          const active = selSize===s;
+          return `<button type="button" onclick="selectModalSize('${esc(s).replace(/'/g,"&#39;")}')" ${disabled?'disabled':''}
+            style="padding:6px 14px;border-radius:20px;border:1px solid ${active?'var(--green-950)':'var(--beige-200)'};background:${active?'var(--green-950)':'#fff'};color:${active?'#fff':'#333'};font-size:12.5px;cursor:${disabled?'not-allowed':'pointer'};${disabled?'opacity:.35;text-decoration:line-through;':''}">${esc(s)}</button>`;
+        }).join("")}
+      </div>
+    </div>`;
+  }
+
+  let selReady, selQty;
+  if(hasColors && hasSizes){ selReady = !!(selColor && selSize); selQty = selReady ? stockFor(p,selColor,selSize) : null; }
+  else if(hasColors){ selReady = !!selColor; selQty = selReady ? stockFor(p,selColor,"") : null; }
+  else { selReady = !!selSize; selQty = selReady ? stockFor(p,"",selSize) : null; }
+
+  return `
+  <div style="margin-top:4px;display:flex;flex-direction:column;gap:12px;">
+    ${colorBlock}
+    ${sizeBlock}
+    ${selReady ? `<div class="hint" style="font-size:12.5px;">${selQty>0 ? `${t('stock_available')}: ${selQty}` : t('out_of_stock')}</div>` : ""}
+  </div>`;
+}
+
+
+/* ---------- REVIEWS (avis clients) ---------- */
+
+function approvedReviewsFor(productId){
+  return REVIEWS.filter(r=>r.productId===productId && r.status==="approved").sort((a,b)=> new Date(b.date)-new Date(a.date));
+}
+
+function reviewAvg(productId){
+  const list = approvedReviewsFor(productId);
+  if(!list.length) return 0;
+  return list.reduce((s,r)=>s+r.rating,0) / list.length;
+}
+
+function starsHtml(rating, size){
+  const r = Math.round(rating);
+  let out = `<span style="letter-spacing:1px;${size?('font-size:'+size+';'):''}color:#c9a35a;">`;
+  for(let i=1;i<=5;i++) out += i<=r ? "★" : "☆";
+  out += "</span>";
+  return out;
+}
+
+function openReviewForm(productId){ REVIEW_FORM_OPEN_FOR = productId; REVIEW_FORM_RATING = 5; render(); }
+function closeReviewForm(){ REVIEW_FORM_OPEN_FOR = null; render(); }
+function setReviewFormRating(n){ REVIEW_FORM_RATING = n; render(); }
+
+async function submitReview(e, productId){
+  e.preventDefault();
+  const f = e.target;
+  const name = f.name.value.trim();
+  const comment = f.comment.value.trim();
+  const rating = REVIEW_FORM_RATING || 5;
+  if(!name || !comment){ showToast(t('fill_required')); return; }
+  const review = {
+    id:"rev_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+    productId, name, rating, comment, date:new Date().toISOString(), status:"pending"
+  };
+  REVIEWS.unshift(review);
+  await saveReviews();
+  await pushDocToCloud("reviews", review);
+  REVIEW_FORM_OPEN_FOR = null;
+  showToast(t('review_sent_ok'));
+  render();
+}
+
+function renderReviewsSection(p){
+  const list = approvedReviewsFor(p.id);
+  const avg = reviewAvg(p.id);
+  const formOpen = REVIEW_FORM_OPEN_FOR === p.id;
+  return `
+  <div class="pd-reviews" style="margin-top:28px;border-top:1px solid var(--beige-200);padding-top:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <h3 class="serif" style="margin:0;font-size:18px;">${t('reviews_title')}</h3>
+      ${list.length ? `<div style="display:flex;align-items:center;gap:8px;">${starsHtml(avg)}<span style="font-size:13px;color:#7c7669;">${avg.toFixed(1)}/5 · ${list.length} ${t('reviews_count_label')}</span></div>` : ""}
+    </div>
+    ${list.length===0 ? `<p class="hint" style="margin-top:10px;">${t('reviews_none')}</p>` : `
+    <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px;">
+      ${list.map(r=>`
+        <div style="border:1px solid var(--beige-200);border-radius:6px;padding:12px 14px;background:var(--beige-50);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <strong style="font-size:14px;color:var(--green-950);">${esc(r.name)}</strong>
+            ${starsHtml(r.rating,'13px')}
+          </div>
+          <p style="margin:6px 0 0;font-size:13.5px;color:#5a5140;">${esc(r.comment)}</p>
+        </div>`).join("")}
+    </div>`}
+
+    ${formOpen ? `
+    <form onsubmit="submitReview(event,'${p.id}')" style="margin-top:18px;border-top:1px dashed var(--beige-200);padding-top:16px;display:flex;flex-direction:column;gap:10px;">
+      <strong style="font-size:14px;">${t('review_write_title')}</strong>
+      <div class="field">
+        <label>${t('full_name')} *</label>
+        <input type="text" name="name" required/>
+      </div>
+      <div class="field">
+        <label>${t('review_rating_label')} *</label>
+        <div style="font-size:22px;cursor:pointer;color:#c9a35a;letter-spacing:4px;">
+          ${[1,2,3,4,5].map(n=>`<span onclick="setReviewFormRating(${n})">${n<=(REVIEW_FORM_RATING||5) ? "★" : "☆"}</span>`).join("")}
+        </div>
+      </div>
+      <div class="field">
+        <label>${t('review_comment_label')} *</label>
+        <textarea name="comment" rows="3" required></textarea>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-dark" type="submit">${t('review_submit_btn')}</button>
+        <button class="btn" type="button" onclick="closeReviewForm()">${t('cancel')}</button>
+      </div>
+    </form>
+    ` : `
+    <button class="btn btn-gold" style="margin-top:16px;" onclick="openReviewForm('${p.id}')">${t('review_write_title')}</button>
+    `}
+  </div>`;
+}
 
 
 function renderProductModal(){
@@ -1289,12 +1710,14 @@ function renderProductModal(){
             ${hasPromo ? `<span class="price-old">${fmtPrice(p.oldPrice)}</span>` : ""}
           </div>
           <p class="pd-desc">${esc(p.desc||"")}</p>
+          ${renderVariantPicker(p)}
           <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
-            <button class="btn btn-dark btn-block" onclick="addToCart('${p.id}',1)">${t('add_cart')}</button>
-            <button class="btn btn-gold btn-block" onclick="buyNow('${p.id}')">${t('buy_now')}</button>
+            <button class="btn btn-dark btn-block" ${!variantSelectionReady(p) ? 'disabled' : ''} onclick="addToCart('${p.id}',1,'${esc(PRODUCT_MODAL_COLOR||"").replace(/'/g,"&#39;")}','${esc(PRODUCT_MODAL_SIZE||"").replace(/'/g,"&#39;")}')">${t('add_cart')}</button>
+            <button class="btn btn-gold btn-block" ${!variantSelectionReady(p) ? 'disabled' : ''} onclick="buyNow('${p.id}','${esc(PRODUCT_MODAL_COLOR||"").replace(/'/g,"&#39;")}','${esc(PRODUCT_MODAL_SIZE||"").replace(/'/g,"&#39;")}')">${t('buy_now')}</button>
           </div>
         </div>
       </div>
+      ${renderReviewsSection(p)}
     </div>
   </div>`;
 }
@@ -1312,20 +1735,22 @@ function renderCartDrawer(){
     <div class="drawer-body">
       ${CART.length===0 ? `<p style="color:#9a9488;text-align:center;margin-top:40px;">${t('cart_empty')}</p>` :
         CART.map(c=>{
-          const p = PRODUCTS.find(pp=>pp.id===c.id);
-          if(!p) return "";
+          const prod = PRODUCTS.find(pp=>pp.id===c.id);
+          if(!prod) return "";
+          const cArg = `'${esc(c.id)}','${esc(c.color||"").replace(/'/g,"&#39;")}','${esc(c.size||"").replace(/'/g,"&#39;")}'`;
           return `
           <div class="cart-item">
-            <img src="${p.mainImage}" alt="${esc(p.name)}"/>
+            <img src="${prod.mainImage}" alt="${esc(prod.name)}"/>
             <div class="cart-item-info">
-              <strong style="font-size:14px;">${esc(p.name)}</strong>
-              <span style="font-size:13px;color:#7c7669;">${fmtPrice(p.price)}</span>
+              <strong style="font-size:14px;">${esc(prod.name)}</strong>
+              ${(c.color||c.size) ? `<span style="font-size:12px;color:#9a9488;">${[c.color,c.size].filter(Boolean).map(esc).join(" / ")}</span>` : ""}
+              <span style="font-size:13px;color:#7c7669;">${fmtPrice(prod.price)}</span>
               <div class="qty-row">
-                <button class="qty-btn" onclick="setCartQty('${p.id}', ${c.qty-1})">-</button>
+                <button class="qty-btn" onclick="setCartQty(${cArg}, ${c.qty-1})">-</button>
                 <span>${c.qty}</span>
-                <button class="qty-btn" onclick="setCartQty('${p.id}', ${c.qty+1})">+</button>
+                <button class="qty-btn" onclick="setCartQty(${cArg}, ${c.qty+1})">+</button>
               </div>
-              <span class="remove-link" onclick="removeFromCart('${p.id}')" style="cursor:pointer;">${t('remove')}</span>
+              <span class="remove-link" onclick="removeFromCart(${cArg})" style="cursor:pointer;">${t('remove')}</span>
             </div>
           </div>`;
         }).join("")
@@ -1334,15 +1759,26 @@ function renderCartDrawer(){
     ${CART.length>0 ? `
     <div class="drawer-foot">
       <div class="cart-total-row"><span>${t('total')}</span><span>${fmtPrice(cartTotal())}</span></div>
-      <button class="btn btn-gold btn-block" onclick="CART_OPEN=false; ORDER_WILAYA=''; ORDER_MODAL_OPEN=true; render();">${t('checkout')}</button>
+      <button class="btn btn-gold btn-block" onclick="CART_OPEN=false; ORDER_WILAYA=''; ORDER_COMMUNE=''; ORDER_DELIVERY_TYPE='home'; ORDER_OFFICE_ID=''; ORDER_MODAL_OPEN=true; render();">${t('checkout')}</button>
     </div>` : ""}
   </div>`;
 }
 
 /* ---------- ORDER FLOW ---------- */
 
-function buyNow(id){ addToCart(id,1); CART_OPEN=false; ORDER_WILAYA=''; ORDER_MODAL_OPEN=true; render(); }
+function buyNow(id, color, size){
+  const ok = addToCart(id,1,color,size);
+  if(!ok) return;
+  CART_OPEN=false; ORDER_WILAYA=''; ORDER_COMMUNE=''; ORDER_DELIVERY_TYPE='home'; ORDER_OFFICE_ID=''; ORDER_MODAL_OPEN=true; render();
+}
 
+function onOrderWilayaChange(code){
+  ORDER_WILAYA=code; ORDER_COMMUNE=''; ORDER_OFFICE_ID='';
+  if(ORDER_DELIVERY_TYPE==='office' && !(STOPDESK_OFFICES_BY_WILAYA[code]||[]).length){ ORDER_DELIVERY_TYPE='home'; }
+  render();
+}
+
+function onOrderDeliveryTypeChange(val){ ORDER_DELIVERY_TYPE=val; ORDER_OFFICE_ID=''; render(); }
 
 async function submitOrder(e){
   e.preventDefault();
@@ -1350,41 +1786,57 @@ async function submitOrder(e){
   const name = f.name.value.trim();
   const phone = f.phone.value.trim();
   const wilayaCode = f.wilaya.value;
-  const commune = f.commune.value.trim();
+  const commune = f.commune ? f.commune.value.trim() : "";
+  const deliveryType = f.deliveryType ? f.deliveryType.value : "home";
   const address = f.address.value.trim();
   const notes = f.notes.value.trim();
-  if(!name || !phone || !wilayaCode || !address){ showToast(t('fill_required')); return; }
+  if(!name || !phone || !wilayaCode || !commune || !address){ showToast(t('fill_required')); return; }
+  if(CART.length===0){ showToast(t('cart_empty')); return; }
+
+  const wilayaOffices = STOPDESK_OFFICES_BY_WILAYA[wilayaCode] || [];
+  let officeInfo = null;
+  if(deliveryType === "office"){
+    if(!wilayaOffices.length){ showToast(t('no_office_in_wilaya')); return; }
+    const officeIdx = f.office ? f.office.value : "";
+    if(officeIdx === "" || !wilayaOffices[officeIdx]){ showToast(t('fill_required')); return; }
+    officeInfo = wilayaOffices[officeIdx];
+  }
+
   const wilayaObj = WILAYAS.find(w=>w[0]===wilayaCode);
   const wilayaLabel = wilayaObj ? (LANG==='ar'?wilayaObj[2]:wilayaObj[1]) : wilayaCode;
 
   const items = CART.map(c=>{
     const p = PRODUCTS.find(pp=>pp.id===c.id);
-    return {id:c.id, name:p?p.name:"?", price:p?p.price:0, qty:c.qty};
+    return {id:c.id, name:p?p.name:"?", price:p?p.price:0, qty:c.qty, color:c.color||"", size:c.size||""};
   });
   const itemsTotal = cartTotal();
   const deliveryFee = deliveryPriceFor(wilayaCode);
   const total = itemsTotal + deliveryFee;
   const order = {
     id:"ord_"+Date.now(), date:new Date().toISOString(), status:"new",
-    customer:{name, phone, wilaya:wilayaLabel, wilayaCode, commune, address, notes}, items,
+    customer:{name, phone, wilaya:wilayaLabel, wilayaCode, commune, address, notes, deliveryType, office: officeInfo}, items,
     delivery:{price:deliveryFee},
     itemsTotal, total,
     shipping48hr:{sent:false, trackingId:"", error:""}
   };
   ORDERS.unshift(order);
+  await decrementStockForItems(items);
   await saveOrders();
   await pushDocToCloud("orders", order);
 
-  // Envoi automatique vers 48HR si le compte est connecté (silencieux pour la cliente)
-  if(SETTINGS.delivery48hr && SETTINGS.delivery48hr.apiToken){
+  // Envoi automatique vers 48HR si l'envoi est activé (silencieux pour la cliente)
+  if(SETTINGS.delivery48hr && SETTINGS.delivery48hr.connected){
     sendOrderTo48HR(order.id, true);
   }
 
   let msg = `🛍️ *Nouvelle commande — Meeverse*\n\n`;
-  msg += `👤 ${name}\n📞 ${phone}\n📍 ${wilayaLabel} — ${address}\n`;
+  msg += `👤 ${name}\n📞 ${phone}\n📍 ${wilayaLabel}, ${commune} — ${address}\n`;
+  msg += `🚚 ${deliveryType==='office' ? t('delivery_type_office') : t('delivery_type_home')}`;
+  if(officeInfo) msg += ` — ${officeInfo.name} (${officeInfo.address})`;
+  msg += `\n`;
   if(notes) msg += `📝 ${notes}\n`;
   msg += `\n🧾 Articles:\n`;
-  items.forEach(it=> msg += `• ${it.name} x${it.qty} — ${it.price*it.qty} DA\n`);
+  items.forEach(it=> msg += `• ${it.name}${it.color?` (${it.color}${it.size?` / ${it.size}`:""})`:(it.size?` (${it.size})`:"")} x${it.qty} — ${it.price*it.qty} DA\n`);
   msg += `\n🚚 Livraison: ${deliveryFee} DA`;
   msg += `\n💰 Total: ${total} DA`;
 
@@ -1392,6 +1844,9 @@ async function submitOrder(e){
 
   CART = [];
   ORDER_WILAYA = "";
+  ORDER_COMMUNE = "";
+  ORDER_DELIVERY_TYPE = "home";
+  ORDER_OFFICE_ID = "";
   ORDER_MODAL_OPEN = false;
   ORDER_SENT = true;
   render();
@@ -1400,6 +1855,8 @@ async function submitOrder(e){
 
 function renderOrderModal(){
   if(!ORDER_MODAL_OPEN) return "";
+  const communeOptions = ORDER_WILAYA ? (COMMUNES_BY_WILAYA[ORDER_WILAYA]||[]) : [];
+  const officeOptions = ORDER_WILAYA ? (STOPDESK_OFFICES_BY_WILAYA[ORDER_WILAYA]||[]) : [];
   return `
   <div class="modal show">
     <div class="modal-backdrop" onclick="ORDER_MODAL_OPEN=false;render();"></div>
@@ -1419,19 +1876,45 @@ function renderOrderModal(){
           </div>
           <div class="field">
             <label>${t('wilaya')} *</label>
-            <select name="wilaya" required onchange="ORDER_WILAYA=this.value;render();">
+            <select name="wilaya" required onchange="onOrderWilayaChange(this.value)">
               <option value="">--</option>
               ${WILAYAS.map(w=>`<option value="${w[0]}" ${w[0]===ORDER_WILAYA?'selected':''}>${w[0]} - ${LANG==='ar'?w[2]:w[1]}</option>`).join("")}
             </select>
           </div>
           <div class="field">
-            <label>${t('commune')}</label>
-            <input type="text" name="commune"/>
+            <label>${t('commune')} *</label>
+            <select name="commune" required ${!ORDER_WILAYA?'disabled':''} onchange="ORDER_COMMUNE=this.value;">
+              <option value="">${ORDER_WILAYA ? t('choose_commune') : t('choose_wilaya_first')}</option>
+              ${communeOptions.map(c=>`<option value="${esc(c[0])}" ${c[0]===ORDER_COMMUNE?'selected':''}>${esc(LANG==='ar'?c[1]:c[0])}</option>`).join("")}
+            </select>
           </div>
           <div class="field">
             <label>${t('address')} *</label>
             <input type="text" name="address" required/>
           </div>
+          <div class="field">
+            <label>${t('delivery_type_label')} *</label>
+            <div style="display:flex;gap:16px;margin-top:4px;flex-wrap:wrap;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:400;">
+                <input type="radio" name="deliveryType" value="home" ${ORDER_DELIVERY_TYPE==='home'?'checked':''} onchange="onOrderDeliveryTypeChange('home')"/> ${t('delivery_type_home')}
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:400;">
+                <input type="radio" name="deliveryType" value="office" ${ORDER_DELIVERY_TYPE==='office'?'checked':''} onchange="onOrderDeliveryTypeChange('office')"/> ${t('delivery_type_office')}
+              </label>
+            </div>
+          </div>
+          ${ORDER_DELIVERY_TYPE==='office' ? (
+            !ORDER_WILAYA ? `<p class="hint" style="font-size:12.5px;">${t('choose_wilaya_first')}</p>` :
+            officeOptions.length>0 ? `
+            <div class="field">
+              <label>${t('choose_office')} *</label>
+              <select name="office" required onchange="ORDER_OFFICE_ID=this.value;">
+                <option value="">--</option>
+                ${officeOptions.map((o,i)=>`<option value="${i}" ${String(i)===ORDER_OFFICE_ID?'selected':''}>${esc(o.name)} — ${esc(o.address)}</option>`).join("")}
+              </select>
+            </div>` :
+            `<p class="hint" style="font-size:12.5px;">${t('no_office_in_wilaya')}</p>`
+          ) : ""}
           <div class="field">
             <label>${t('notes')}</label>
             <textarea name="notes" rows="2"></textarea>
@@ -1470,50 +1953,51 @@ function renderOrderSentModal(){
 }
 
 
+/*
+ * Envoie une commande vers l'API 48HR Livraison (plateforme Ecotrack).
+ * SÉCURITÉ : l'appel ne se fait PAS directement vers 48HR depuis le navigateur
+ * de la cliente. Il passe par une fonction Netlify (/api/send-to-48hr) qui
+ * détient le jeton API en toute sécurité côté serveur.
+ * Voir netlify/functions/send-to-48hr.js.
+ */
 async function sendOrderTo48HR(orderId, silent){
   const order = ORDERS.find(o=>o.id===orderId);
   if(!order) return;
   const cfg = SETTINGS.delivery48hr;
-  if(!cfg || !cfg.apiToken){ if(!silent) showToast(t('e48hr_not_connected_err')); return; }
+  if(!cfg || !cfg.connected){ if(!silent) showToast(t('e48hr_not_connected_err')); return; }
 
   order.shipping48hr = order.shipping48hr || {};
   order.shipping48hr.sending = true;
   render();
 
   const productList = order.items.map(it=>`${it.name} x${it.qty}`).join(", ");
+  const wilayaCodeNum = order.customer.wilayaCode ? parseInt(order.customer.wilayaCode, 10) : null;
 
   const payload = {
-    Tracking: order.id,
-    id_Externe: order.id,
-    Source: "Meeverse",
-    TypeLivraison: 1,      // 1 = à domicile
-    TypeColis: 0,          // 0 = normal
-    Confrimee: 0,
-    Client: order.customer.name,
-    MobileA: order.customer.phone,
-    MobileB: "",
-    Adresse: order.customer.address,
-    IDWilaya: order.customer.wilayaCode || "",
-    Commune: order.customer.commune || "",
-    Total: order.total,
-    Note: order.customer.notes || "",
-    TProduit: productList
+    reference: order.id,
+    nomClient: order.customer.name,
+    telephone: order.customer.phone,
+    adresse: order.customer.address,
+    commune: order.customer.commune || "",
+    codeWilaya: wilayaCodeNum,
+    montant: order.total,
+    remarque: order.customer.notes || "",
+    produit: productList,
+    type: 1,      // 1 = Livraison
+    stopDesk: order.customer.deliveryType === "office" ? 1 : 0   // 0 = à domicile, 1 = Stopdesk (bureau)
   };
 
   try{
-    const res = await fetch(`${cfg.baseUrl}/api/create/order`, {
+    const res = await fetch("/api/send-to-48hr", {
       method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "Authorization":`Bearer ${cfg.apiToken}`
-      },
+      headers:{ "Content-Type":"application/json" },
       body: JSON.stringify(payload)
     });
     const data = await res.json().catch(()=> ({}));
-    if(!res.ok) throw new Error(data && data.message ? data.message : ("HTTP "+res.status));
+    if(!res.ok) throw new Error(data && data.error ? data.error : ("HTTP "+res.status));
     order.shipping48hr = {
       sent:true, sending:false, error:"",
-      trackingId: (data && (data.tracking || data.Tracking || data.trackingId)) || order.id,
+      trackingId: (data && (data.tracking || data.Tracking || data.trackingId || (data.order && data.order.tracking))) || order.id,
       sentAt: new Date().toISOString()
     };
     if(!silent) showToast(t('sent_48hr_ok'));
